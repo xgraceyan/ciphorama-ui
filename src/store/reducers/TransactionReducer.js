@@ -1,5 +1,5 @@
 const initState = {
-  transactions: [
+  transaction: [
     {
       id: "0xb1",
       amount: 0,

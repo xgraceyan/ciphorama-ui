@@ -1,5 +1,5 @@
 const initState = {
-  accounts: [
+  account: [
     {
       id: "0xa1",
       owner: "usdcoin",

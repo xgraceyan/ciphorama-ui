@@ -1,6 +1,104 @@
-import { Table, Tag, Space } from "antd";
+import React, { useRef, useState } from "react";
+import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import moment from "moment";
 
-const DashboardTable = () => {
+function DashboardTable() {
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <DatePicker.RangePicker
+          style={{ marginBottom: 8, display: "block" }}
+          popupStyle={{ margin: 0 }}
+          value={selectedKeys[0]}
+          className="table-date-picker"
+          onChange={(e) => setSelectedKeys(e ? [e] : [])}
+          onPressEnter={() => {
+            confirm();
+            setSearchText(selectedKeys[0]);
+            setSearchedColumn(dataIndex);
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 100,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 100,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            Close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? moment(record[dataIndex]).isBetween(
+            moment(value[0]).format("YYYY-MM-DD"),
+            moment(value[1]).format("YYYY-MM-DD"),
+            "day",
+            "[]"
+          )
+        : "",
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) => moment.unix(text).format("MMM DD, YYYY LT"),
+  });
+
   const columns = [
     {
       title: "Risk",
@@ -11,13 +109,7 @@ const DashboardTable = () => {
       title: "Date/Time",
       dataIndex: "date",
       key: "date",
-      filters: [
-        {
-          text: "Joe",
-          value: "Joe",
-        },
-      ],
-      onFilter: (value, record) => record.name.includes(value),
+      ...getColumnSearchProps("date"),
     },
     {
       title: "Asset",
@@ -62,17 +154,11 @@ const DashboardTable = () => {
   const data = [
     {
       key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
+      date: "2016-10-30",
     },
     {
       key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
+      date: "1673755493",
     },
     {
       key: "3",
@@ -89,6 +175,6 @@ const DashboardTable = () => {
       pagination={{ position: ["topRight"] }}
     />
   );
-};
+}
 
 export default DashboardTable;

@@ -52,3 +52,11 @@ code {
 .stats-cases {
   margin: 0.5rem 0 1rem 1rem;
 }
+
+.ant-picker-range-arrow {
+  visibility: hidden;
+}
+
+.table-date-picker .ant-picker-active-bar {
+  visibility: hidden;
+}
