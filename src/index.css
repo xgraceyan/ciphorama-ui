@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* sidebar trigger */
+.ant-layout-sider-zero-width-trigger {
+  margin-top: 2.5rem;
+}
+
+/* stats-section */
+
+/* card styling */
+.stats-col {
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  margin-right: 0.75rem !important;
+}
+
+.risk-card {
+  margin: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.risk-card-text {
+  margin: 0 !important;
+  text-align: center;
+}
+
+.stats-transactions-text {
+  margin: 1.5rem 1rem 1rem 1rem !important;
+}
+
+.stats-transactions-text p {
+  margin: 0 0 0.5rem 0;
+}
+
+.stats-transactions-text b {
+  font-weight: 600 !important;
+}
+
+.stats-cases {
+  margin: 0.5rem 0 1rem 1rem;
+}
