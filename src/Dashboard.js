@@ -30,22 +30,42 @@ const { Content } = Layout;
 
 var jsonQuery = require("json-query");
 
+const graph_url = 'http://localhost:9000/query/haijin_eth_test/address_txn_1hop?from_addr=0x0c46c5be97272dacd58574949cbb8921ce0c5a39';
+
+// https://www.twilio.com/blog/react-choose-functional-components
 function Dashboard(props) {
   let { id } = useParams();
+  // TODO(haijin): do we send ajax request onload ?
   let query = "accounts[id=" + id + "]";
   let account = jsonQuery(query, {
     data: props,
   }).value;
+  console.log("loading dashboard ", query, " account: ", account);
 
   const navigate = useNavigate();
-
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const onSearch = (value) => {
+    console.log("on search nav to ", value);
+    fetch(graph_url, {mode: 'no-cors'})
+      .then(
+        (result) => {
+          console.log("graph ajax result: ", result);
+        }, 
+        (error) => {
+          console.log(" error ", error);
+        },
+      );
     navigate("/" + value);
   };
+
+  const local_state = React.useState();
+
+  React.useEffect(() => {
+    console.log("Dashboard Mounted");
+  }, []);
 
   if (account) {
     return (
