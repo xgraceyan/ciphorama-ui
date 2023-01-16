@@ -26,11 +26,89 @@ import Paragraph from "antd/es/typography/Paragraph";
 import DashboardTable from "./components/DashboardTable";
 import Sidebar from "./components/Sidebar";
 import Search from "antd/es/input/Search";
-const { Content } = Layout;
+import thunk from "redux-thunk";
 
 var jsonQuery = require("json-query");
 
+const middlewares = [thunk]; 
+
 const graph_url = 'http://localhost:9000/query/haijin_eth_test/address_txn_1hop?from_addr=0x0c46c5be97272dacd58574949cbb8921ce0c5a39';
+const { Content } = Layout;
+
+function createUseMiddlewareReducer(middlewares) {
+  return (reducer, initState, initializer = s => s) => {
+    const [state, setState] = React.useState(initializer(initState));
+    const stateRef = React.useRef(state); // stores most recent state
+    const dispatch = React.useMemo(
+      () =>
+        enhanceDispatch({
+          getState: () => stateRef.current, // access most recent state
+          stateDispatch: action => {
+            stateRef.current = reducer(stateRef.current, action); // makes getState() possible
+            setState(stateRef.current); // trigger re-render
+            return action;
+          }
+        })(...middlewares),
+      [middlewares, reducer]
+    );
+    return [state, dispatch];
+  }
+}
+// |  dispatch fn  |
+// A middleware has type (dispatch, getState) => nextMw => action => action
+function enhanceDispatch({ getState, stateDispatch }) {
+  return (...middlewares) => {
+    let dispatch;
+    const middlewareAPI = {
+      getState,
+      dispatch: action => dispatch(action)
+    };
+    dispatch = middlewares
+      .map(m => m(middlewareAPI))
+      .reduceRight((next, mw) => mw(next), stateDispatch);
+    return dispatch;
+  };
+}
+const useMiddlewareReducer = createUseMiddlewareReducer(middlewares); //init Hook
+
+const account_reducer = (state, { type, account }) => {
+  console.log("account_reducer :", state, type, account);
+  if (type === "loading") return { status: "loading", ...state };
+  if (type === "finished") return { status: "finished", data: account };
+  return state;
+};
+
+function fetch_account(account) {
+  return (dispatch, getState) => {
+    fetch(graph_url, {mode: 'no-cors'})
+      .then(
+        (result) => {
+          console.log("graph ajax request:", account, " result: ", result, " getState:", getState());
+          let accounts = getState().accounts;
+          accounts.push({
+            id: account,
+            owner: "usdcoin",
+            ownerId: "1",
+            type: "services",
+            country: "US",
+            risk: 2,
+            currentBalance: 567.00,
+            received: 567.00, 
+            receivedTransactions: 567890,
+            sent: 2,
+            sentTransactions: 2,
+          });
+          dispatch({
+            type: "loading",
+            accounts: accounts
+          });
+        },
+        (error) => {
+          console.log(" error ", error);
+        },
+      );
+  }
+}
 
 // https://www.twilio.com/blog/react-choose-functional-components
 function Dashboard(props) {
@@ -40,24 +118,19 @@ function Dashboard(props) {
   let account = jsonQuery(query, {
     data: props,
   }).value;
-  console.log("loading dashboard ", query, " account: ", account);
+  console.log("loading dashboard ", query, " props ", props);
 
   const navigate = useNavigate();
+  const [state, dispatch] = useMiddlewareReducer(account_reducer, 
+    /*initState=*/{status: "idle", accounts: props.accounts});
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const onSearch = (value) => {
     console.log("on search nav to ", value);
-    fetch(graph_url, {mode: 'no-cors'})
-      .then(
-        (result) => {
-          console.log("graph ajax result: ", result);
-        }, 
-        (error) => {
-          console.log(" error ", error);
-        },
-      );
+    dispatch(fetch_account(value));
     navigate("/" + value);
   };
 
@@ -216,7 +289,8 @@ function Dashboard(props) {
 
 const mapStateToProps = (state) => {
   return {
-    accounts: state.accounts.account,
+    accounts: state.accounts.accounts,
+    transactions: state.transactions.transactions,
   };
 };
 

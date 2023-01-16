@@ -1,9 +1,10 @@
 import React, { useRef, useState } from "react";
+import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 
-function DashboardTable() {
+function DashboardTable(props) {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -151,23 +152,12 @@ function DashboardTable() {
       key: "geo",
     },
   ];
-  const data = [
-    {
-      key: "1",
-      date: "2016-10-30",
-    },
-    {
-      key: "2",
-      date: "1673755493",
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
-    },
-  ];
+
+  const data = [];
+  for (const txn of props.transactions) {
+    data.push({key: txn.id, transactionId: txn.id, date: txn.date});
+  }
+
   return (
     <Table
       columns={columns}
@@ -177,4 +167,12 @@ function DashboardTable() {
   );
 }
 
-export default DashboardTable;
+// map the entire redux store state to props.
+const mapStateToProps = (state) => {
+  return {
+    accounts: state.accounts.accounts,
+    transactions: state.transactions.transactions,
+  };
+};
+
+export default connect(mapStateToProps)(DashboardTable);
