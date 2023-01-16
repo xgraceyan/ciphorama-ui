@@ -24,6 +24,7 @@ import {
 import Title from "antd/es/typography/Title";
 import Paragraph from "antd/es/typography/Paragraph";
 import DashboardTable from "./components/DashboardTable";
+import AccountDetails from "./components/AccountDetails";
 import Sidebar from "./components/Sidebar";
 import Search from "antd/es/input/Search";
 import thunk from "redux-thunk";
@@ -32,7 +33,8 @@ var jsonQuery = require("json-query");
 
 const middlewares = [thunk]; 
 
-const graph_url = 'http://localhost:9000/query/haijin_eth_test/address_txn_1hop?from_addr=0x0c46c5be97272dacd58574949cbb8921ce0c5a39';
+//const graph_url = 'http://localhost:9000/query/haijin_eth_test/address_txn_1hop?from_addr=0x0c46c5be97272dacd58574949cbb8921ce0c5a39';
+const graph_url = 'http://localhost:3001/accounts/';
 const { Content } = Layout;
 
 function createUseMiddlewareReducer(middlewares) {
@@ -54,7 +56,6 @@ function createUseMiddlewareReducer(middlewares) {
     return [state, dispatch];
   }
 }
-// |  dispatch fn  |
 // A middleware has type (dispatch, getState) => nextMw => action => action
 function enhanceDispatch({ getState, stateDispatch }) {
   return (...middlewares) => {
@@ -71,50 +72,41 @@ function enhanceDispatch({ getState, stateDispatch }) {
 }
 const useMiddlewareReducer = createUseMiddlewareReducer(middlewares); //init Hook
 
-const account_reducer = (state, { type, account }) => {
-  console.log("account_reducer :", state, type, account);
-  if (type === "loading") return { status: "loading", ...state };
-  if (type === "finished") return { status: "finished", data: account };
+const account_reducer = (state, { type, accounts }) => {
+  console.log("account_reducer :", state, type, accounts);
+  // if (type === "loading") return { status: "loading", ...state };
+  // if (type === "finished") return { status: "finished", accounts };
   return state;
 };
 
 function fetch_account(account) {
+  const accounts_url = graph_url + '/' + account;
   return (dispatch, getState) => {
-    fetch(graph_url, {mode: 'no-cors'})
+    fetch(accounts_url, {method: 'GET'})
+      .then(response => response.json())
       .then(
-        (result) => {
-          console.log("graph ajax request:", account, " result: ", result, " getState:", getState());
+        (acct) => {
+          console.log("graph ajax request:", accounts_url, " acct: ", acct, " getState:", getState());
           let accounts = getState().accounts;
-          accounts.push({
-            id: account,
-            owner: "usdcoin",
-            ownerId: "1",
-            type: "services",
-            country: "US",
-            risk: 2,
-            currentBalance: 567.00,
-            received: 567.00, 
-            receivedTransactions: 567890,
-            sent: 2,
-            sentTransactions: 2,
-          });
+          let idx = accounts.findIndex(a => a.id == acct.id);
+          if (idx > -1) { accounts.splice(idx, 1, acct);} 
+          else { accounts.push(acct);}
           dispatch({
-            type: "loading",
+            type: "finished",
             accounts: accounts
           });
         },
         (error) => {
-          console.log(" error ", error);
+          console.log("result error ", error);
         },
-      );
+      ).catch(console.log);
   }
 }
 
 // https://www.twilio.com/blog/react-choose-functional-components
 function Dashboard(props) {
-  let { id } = useParams();
-  // TODO(haijin): do we send ajax request onload ?
-  let query = "accounts[id=" + id + "]";
+  let { account_id } = useParams();
+  let query = "accounts[id=" + account_id + "]";
   let account = jsonQuery(query, {
     data: props,
   }).value;
@@ -140,151 +132,46 @@ function Dashboard(props) {
     console.log("Dashboard Mounted");
   }, []);
 
-  if (account) {
-    return (
+  return (
+    <Layout>
       <Layout>
-        <Layout>
-          <Sidebar />
-          <Content
+        <Sidebar />
+        <Content
+          style={{
+            margin: "0",
+          }}
+        >
+          <div
             style={{
-              margin: "0",
+              padding: 30,
+              background: colorBgContainer,
+              minHeight: "100vh",
+              overflow: "auto",
             }}
           >
-            <div
-              style={{
-                padding: 30,
-                background: colorBgContainer,
-                minHeight: "100vh",
-                overflow: "auto",
-              }}
-            >
-              <section className="search-section">
-                <Paragraph>ADDRESS: ETHEREUM (ETH)</Paragraph>
-                <Search
-                  placeholder="Lookup address"
-                  onSearch={onSearch}
-                  enterButton
-                  style={{ width: "75%" }}
-                />
-              </section>
+            <section className="search-section">
+              <Paragraph>ADDRESS: ETHEREUM (ETH)</Paragraph>
+              <Search
+                placeholder="Lookup address"
+                onSearch={onSearch}
+                enterButton
+                style={{ width: "75%" }}
+              />
+            </section>
 
-              <Divider />
+            <Divider />
+            <AccountDetails key={props.accounts} account_id={account_id}/>
 
-              <section className="stats-section">
-                <Row gutter={[8, 8]}>
-                  <Col flex={3} className="stats-col">
-                    <Space>
-                      <Card
-                        className="risk-card"
-                        size="small"
-                        style={{ backgroundColor: "#ff4d4f", color: "white" }}
-                      >
-                        <p className="risk-card-text">RISK</p>
-                        <h1
-                          className="risk-card-text"
-                          style={{ fontSize: "2rem" }}
-                        >
-                          {account.risk}
-                        </h1>
-                      </Card>
-                      <div>
-                        <p>
-                          <strong>OWNER</strong> &nbsp;{" "}
-                          {account.owner.toUpperCase()}
-                        </p>
-                        <p>
-                          <strong>TYPE</strong> &nbsp;{" "}
-                          {account.type.toUpperCase()}
-                        </p>
-                        <p>
-                          <strong>COUNTRY</strong> &nbsp; {account.country}
-                        </p>
-                      </div>
-                    </Space>
-                  </Col>
-                  <Col flex={3} className="stats-col">
-                    <Row>
-                      <Col span={8}>
-                        <div className="stats-transactions-text">
-                          <p>
-                            <strong>TOTAL</strong>
-                          </p>
-                          <p>
-                            <b>{account.currentBalance} ETH</b>
-                          </p>
-                          <p>
-                            <b>
-                              {account.receivedTransactions +
-                                account.sentTransactions}
-                            </b>{" "}
-                            transactions
-                          </p>
-                        </div>
-                      </Col>
-                      <Col span={8}>
-                        <div className="stats-transactions-text">
-                          <p>
-                            <strong>RECEIVED</strong>
-                          </p>
-                          <p style={{ color: "#52c41a" }}>
-                            <b>{account.received} ETH</b>
-                          </p>
-                          <p>
-                            <b>{account.receivedTransactions}</b> transactions
-                          </p>
-                        </div>
-                      </Col>
-                      <Col span={8}>
-                        <div className="stats-transactions-text">
-                          <p>
-                            <strong>SENT</strong>
-                          </p>
-                          <p style={{ color: "#f5222d" }}>
-                            <b>{account.sent} ETH</b>
-                          </p>
-                          <p>
-                            <b>{account.sentTransactions}</b> transactions
-                          </p>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col flex={2} className="stats-col">
-                    <div className="stats-cases">
-                      <Space>
-                        <Tabs
-                          items={[
-                            {
-                              key: "0",
-                              label: "MY CASES",
-                              children: "Not in cases you own",
-                            },
-                            {
-                              key: "1",
-                              label: "SHARED CASES",
-                              children: "Not in cases shared with you",
-                            },
-                          ]}
-                        />
-                      </Space>
-                    </div>
-                  </Col>
-                </Row>
-              </section>
+            <Divider />
 
-              <Divider />
-
-              <section className="table-section">
-                <DashboardTable />
-              </section>
-            </div>
-          </Content>
-        </Layout>
+            <section className="table-section">
+              <DashboardTable />
+            </section>
+          </div>
+        </Content>
       </Layout>
-    );
-  } else {
-    return <h1>Error: No account found</h1>;
-  }
+    </Layout>
+  );
 }
 
 const mapStateToProps = (state) => {
