@@ -1,0 +1,68 @@
+{
+  "accounts": [
+    {
+      "id": "0xa1",
+      "owner": "usdcoin",
+      "ownerId": "1",
+      "type": "services",
+      "country": "US",
+      "risk": 9,
+      "currentBalance": 123.00,
+      "received": 123.00, 
+      "receivedTransactions": 123890,
+      "sent": 2,
+      "sentTransactions": 2
+    },
+    {
+      "id": "0xa2",
+      "owner": "usdcoin",
+      "ownerId": "2",
+      "type": "services",
+      "country": "ASIA",
+      "risk": 2,
+      "currentBalance": 567.00,
+      "received": 567.00, 
+      "receivedTransactions": 567890,
+      "sent": 2,
+      "sentTransactions": 2
+    }
+  ],
+  "transactions": [
+    {
+      "id": "0xT1",
+      "amount": 10,
+      "risk": 1,
+      "date": 1673312410,
+      "asset": null,
+      "fromAccount": "0xa1",
+      "toAccount": "0xa2",
+      "entityName": "Uniswap",
+      "entityType": "services",
+      "geo": "US"
+    },
+    {
+      "id": "0xT2",
+      "amount": 20,
+      "risk": 1,
+      "date": 1673322410,
+      "asset": null,
+      "fromAccount": "0xa1",
+      "toAccount": "0xa3",
+      "entityName": "Uniswap",
+      "entityType": "services",
+      "geo": "US"
+    },
+    {
+      "id": "0xT3",
+      "amount": 30,
+      "risk": 1,
+      "date": 1673332410,
+      "asset": null,
+      "fromAccount": "0xa2",
+      "toAccount": "0xa3",
+      "entityName": "Uniswap",
+      "entityType": "services",
+      "geo": "US"
+    }
+  ]
+}

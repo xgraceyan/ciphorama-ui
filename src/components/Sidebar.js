@@ -41,11 +41,10 @@ const Sidebar = () => {
         <Paragraph
           style={{
             color: "white",
-            fontSize: "0.75rem",
+            fontSize: "1rem",
           }}
         >
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi,
-          fugit.
+          Ethereum Taint Tracing
         </Paragraph>
       </div>
       <Menu
