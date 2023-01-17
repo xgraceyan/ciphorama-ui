@@ -28,93 +28,23 @@ import AccountDetails from "./components/AccountDetails";
 import Sidebar from "./components/Sidebar";
 import Search from "antd/es/input/Search";
 import thunk from "redux-thunk";
+import { fetchAccount } from "./store/actions/AccountActions";
 
 var jsonQuery = require("json-query");
 
-const middlewares = [thunk]; 
+const middlewares = [thunk];
 
 //const graph_url = 'http://localhost:9000/query/haijin_eth_test/address_txn_1hop?from_addr=0x0c46c5be97272dacd58574949cbb8921ce0c5a39';
-const graph_url = 'http://localhost:3001/accounts/';
+const graph_url = "http://localhost:3001/accounts/";
 const { Content } = Layout;
-
-function createUseMiddlewareReducer(middlewares) {
-  return (reducer, initState, initializer = s => s) => {
-    const [state, setState] = React.useState(initializer(initState));
-    const stateRef = React.useRef(state); // stores most recent state
-    const dispatch = React.useMemo(
-      () =>
-        enhanceDispatch({
-          getState: () => stateRef.current, // access most recent state
-          stateDispatch: action => {
-            stateRef.current = reducer(stateRef.current, action); // makes getState() possible
-            setState(stateRef.current); // trigger re-render
-            return action;
-          }
-        })(...middlewares),
-      [middlewares, reducer]
-    );
-    return [state, dispatch];
-  }
-}
-// A middleware has type (dispatch, getState) => nextMw => action => action
-function enhanceDispatch({ getState, stateDispatch }) {
-  return (...middlewares) => {
-    let dispatch;
-    const middlewareAPI = {
-      getState,
-      dispatch: action => dispatch(action)
-    };
-    dispatch = middlewares
-      .map(m => m(middlewareAPI))
-      .reduceRight((next, mw) => mw(next), stateDispatch);
-    return dispatch;
-  };
-}
-const useMiddlewareReducer = createUseMiddlewareReducer(middlewares); //init Hook
-
-const account_reducer = (state, { type, accounts }) => {
-  console.log("account_reducer :", state, type, accounts);
-  // if (type === "loading") return { status: "loading", ...state };
-  // if (type === "finished") return { status: "finished", accounts };
-  return state;
-};
-
-function fetch_account(account) {
-  const accounts_url = graph_url + '/' + account;
-  return (dispatch, getState) => {
-    fetch(accounts_url, {method: 'GET'})
-      .then(response => response.json())
-      .then(
-        (acct) => {
-          console.log("graph ajax request:", accounts_url, " acct: ", acct, " getState:", getState());
-          let accounts = getState().accounts;
-          let idx = accounts.findIndex(a => a.id == acct.id);
-          if (idx > -1) { accounts.splice(idx, 1, acct);} 
-          else { accounts.push(acct);}
-          dispatch({
-            type: "finished",
-            accounts: accounts
-          });
-        },
-        (error) => {
-          console.log("result error ", error);
-        },
-      ).catch(console.log);
-  }
-}
 
 // https://www.twilio.com/blog/react-choose-functional-components
 function Dashboard(props) {
   let { account_id } = useParams();
   let query = "accounts[id=" + account_id + "]";
-  let account = jsonQuery(query, {
-    data: props,
-  }).value;
   console.log("loading dashboard ", query, " props ", props);
 
   const navigate = useNavigate();
-  const [state, dispatch] = useMiddlewareReducer(account_reducer, 
-    /*initState=*/{status: "idle", accounts: props.accounts});
 
   const {
     token: { colorBgContainer },
@@ -122,7 +52,7 @@ function Dashboard(props) {
 
   const onSearch = (value) => {
     console.log("on search nav to ", value);
-    dispatch(fetch_account(value));
+    props.fetchAccount(value, graph_url);
     navigate("/" + value);
   };
 
@@ -130,7 +60,13 @@ function Dashboard(props) {
 
   React.useEffect(() => {
     console.log("Dashboard Mounted");
+    if (props.accounts) {
+      if (props.accounts.id == account_id) {
+      } else props.fetchAccount(account_id, graph_url);
+    } else props.fetchAccount(account_id, graph_url);
   }, []);
+
+  let account = props.accounts;
 
   return (
     <Layout>
@@ -160,7 +96,7 @@ function Dashboard(props) {
             </section>
 
             <Divider />
-            <AccountDetails key={props.accounts} account_id={account_id}/>
+            <AccountDetails account={account} />
 
             <Divider />
 
@@ -181,4 +117,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchAccount: (account, graph_url) =>
+      dispatch(fetchAccount(account, graph_url)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
