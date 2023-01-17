@@ -118,8 +118,6 @@ function AccountDetails({ account }) {
         </Row>
       </section>
     );
-  } else {
-    return <h1>Error: No account found</h1>;
   }
 }
 

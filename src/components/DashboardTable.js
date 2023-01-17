@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
+import _ from "underscore";
 
 function DashboardTable(props) {
   const [searchText, setSearchText] = useState("");
@@ -153,10 +154,17 @@ function DashboardTable(props) {
     },
   ];
 
+  console.log("loading txn table, props ", props);
   const data = [];
   for (const txn of props.transactions) {
     data.push({key: txn.id, transactionId: txn.id, date: txn.date});
   }
+  if (!_.isEmpty(props.currentAcct)) {
+    for (const txn of props.currentAcct.transactions) {
+      data.push({key: txn.id, transactionId: txn.id, date: txn.date});
+    }
+  }
+
 
   return (
     <Table
@@ -170,6 +178,7 @@ function DashboardTable(props) {
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
   return {
+    currentAcct: state.accounts.currentAcct,
     accounts: state.accounts.accounts,
     transactions: state.transactions.transactions,
   };

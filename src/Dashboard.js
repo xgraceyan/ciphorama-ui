@@ -41,9 +41,9 @@ const { Content } = Layout;
 // https://www.twilio.com/blog/react-choose-functional-components
 function Dashboard(props) {
   let { account_id } = useParams();
-  let query = "accounts[id=" + account_id + "]";
-  console.log("loading dashboard ", query, " props ", props);
-
+  const local_state = React.useState();
+  const [state, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
   const navigate = useNavigate();
 
   const {
@@ -56,18 +56,15 @@ function Dashboard(props) {
     navigate("/" + value);
   };
 
-  const local_state = React.useState();
-
   React.useEffect(() => {
-    console.log("Dashboard Mounted");
-    if (props.accounts) {
-      if (props.accounts.id == account_id) {
-      } else props.fetchAccount(account_id, graph_url);
-    } else props.fetchAccount(account_id, graph_url);
+    console.log("Dashboard Mounted with props: ", props);
+    if (!props.accounts || props.accounts.length == 0 || !props.accounts[0].id == account_id) {
+      props.fetchAccount(account_id, graph_url, props);
+    }
   }, []);
 
-  let account = props.accounts;
-
+  const curAcct = props.currentAcct;
+  console.log("loading dashboard account_id", account_id, " props ", props, " current account ", curAcct);
   return (
     <Layout>
       <Layout>
@@ -96,7 +93,7 @@ function Dashboard(props) {
             </section>
 
             <Divider />
-            <AccountDetails account={account} />
+            <AccountDetails account={curAcct} />
 
             <Divider />
 
@@ -112,6 +109,7 @@ function Dashboard(props) {
 
 const mapStateToProps = (state) => {
   return {
+    currentAcct: state.accounts.currentAcct,
     accounts: state.accounts.accounts,
     transactions: state.transactions.transactions,
   };
