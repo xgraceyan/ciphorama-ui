@@ -4,6 +4,7 @@ const initState = {
   accounts: [],
 };
 
+// https://stackoverflow.com/questions/39513753/my-redux-state-has-changed-why-doesnt-react-trigger-a-re-render
 const AccountReducer = (state = initState, action) => {
   switch (action.type) {
     case "ACCOUNT_LOADING_SUCCESS":

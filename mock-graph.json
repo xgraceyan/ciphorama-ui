@@ -1,4 +1,45 @@
 {
+  "customer": {
+    "totalAddresses": 10685,
+    "totalTransactions": 256226123,
+    "totalOpenCases": 3,
+    "walletRisk": {
+      "severity": {
+        "high": 5,
+        "medium": 18,
+        "low": 80
+      },
+      "categories": {
+        "theft": 7.5,
+        "scams": 16.2,
+        "ransomware": 11.9
+      }
+    },
+    "assetTypes": {
+      "ethereum": 55.3,
+      "polygon": 2.55,
+      "avalanche": 1.98,
+      "other": 8.1
+    },
+    "case": [
+      {
+        "name": "john",
+        "assigned": 1,
+        "closed": 2,
+        "open": 5,
+        "lastActivity": "10/23/2021"
+      },
+      {
+        "name": "john",
+        "assigned": 1,
+        "closed": 2,
+        "open": 5,
+        "lastActivity": "10/23/2021"
+      }
+    ]
+
+
+  },
   "accounts": [
     {
       "id": "0xa1",
@@ -11,7 +52,33 @@
       "received": 123.00, 
       "receivedTransactions": 123890,
       "sent": 2,
-      "sentTransactions": 2
+      "sentTransactions": 2,
+      "transactions": [
+        {
+          "id": "0xT1",
+          "amount": 10,
+          "risk": 1,
+          "date": 1673312410,
+          "asset": null,
+          "fromAccount": "0xa1",
+          "toAccount": "0xa2",
+          "entityName": "Uniswap",
+          "entityType": "services",
+          "geo": "US"
+        },
+        {
+          "id": "0xT2",
+          "amount": 20,
+          "risk": 1,
+          "date": 1673322410,
+          "asset": null,
+          "fromAccount": "0xa1",
+          "toAccount": "0xa3",
+          "entityName": "Uniswap",
+          "entityType": "services",
+          "geo": "US"
+        }
+      ]
     },
     {
       "id": "0xa2",
@@ -24,7 +91,33 @@
       "received": 567.00, 
       "receivedTransactions": 567890,
       "sent": 2,
-      "sentTransactions": 2
+      "sentTransactions": 2,
+      "transactions": [
+        {
+          "id": "0xT3",
+          "amount": 30,
+          "risk": 1,
+          "date": 1673332410,
+          "asset": null,
+          "fromAccount": "0xa2",
+          "toAccount": "0xa3",
+          "entityName": "Uniswap",
+          "entityType": "services",
+          "geo": "US"
+        },
+        {
+          "id": "0xT4",
+          "amount": 40,
+          "risk": 1,
+          "date": 1673332410,
+          "asset": null,
+          "fromAccount": "0xa2",
+          "toAccount": "0xa1",
+          "entityName": "Uniswap",
+          "entityType": "services",
+          "geo": "US"
+        }
+      ]
     }
   ],
   "transactions": [
@@ -60,6 +153,18 @@
       "asset": null,
       "fromAccount": "0xa2",
       "toAccount": "0xa3",
+      "entityName": "Uniswap",
+      "entityType": "services",
+      "geo": "US"
+    },
+    {
+      "id": "0xT4",
+      "amount": 40,
+      "risk": 1,
+      "date": 1673332410,
+      "asset": null,
+      "fromAccount": "0xa2",
+      "toAccount": "0xa1",
       "entityName": "Uniswap",
       "entityType": "services",
       "geo": "US"
