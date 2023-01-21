@@ -60,3 +60,66 @@ code {
 .table-date-picker .ant-picker-active-bar {
   visibility: hidden;
 }
+
+.icon-button {
+  color: gray;
+}
+
+.icon-button:hover {
+  color: whitesmoke;
+}
+
+.nav-header,
+.navbar {
+  background: white !important;
+}
+
+.navbar .ant-menu-item:after {
+  visibility: hidden;
+}
+
+.navbar .ant-menu-overflow-item::after {
+  visibility: hidden;
+}
+
+.nav-search .ant-input-affix-wrapper {
+  width: 30rem;
+}
+
+@media screen and (max-width: 678px) {
+  .logo {
+    margin: -14px 10px 0px -30px !important;
+  }
+  .logo h1 {
+    font-size: 15px;
+  }
+  .nav-search {
+    visibility: hidden;
+  }
+  .ant-space-item:has(> .nav-search) {
+    visibility: hidden;
+    display: none;
+  }
+}
+
+@media screen and (max-width: 735px) {
+  .nav-right {
+    margin-right: -16px !important;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .nav-search .ant-input-affix-wrapper {
+    width: 15rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .nav-search .ant-input-affix-wrapper {
+    width: 10rem;
+  }
+}
+
+.tableRow:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}

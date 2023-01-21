@@ -29,6 +29,7 @@ import Sidebar from "./components/Sidebar";
 import Search from "antd/es/input/Search";
 import thunk from "redux-thunk";
 import { fetchAccount } from "./store/actions/AccountActions";
+import { Header } from "antd/es/layout/layout";
 
 var jsonQuery = require("json-query");
 
@@ -46,10 +47,6 @@ function Dashboard(props) {
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const navigate = useNavigate();
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
   const onSearch = (value) => {
     console.log("on search nav to ", value);
     props.fetchAccount(value, graph_url);
@@ -58,13 +55,24 @@ function Dashboard(props) {
 
   React.useEffect(() => {
     console.log("Dashboard Mounted with props: ", props);
-    if (!props.accounts || props.accounts.length == 0 || !props.accounts[0].id == account_id) {
+    if (
+      !props.accounts ||
+      props.accounts.length == 0 ||
+      !props.accounts[0].id == account_id
+    ) {
       props.fetchAccount(account_id, graph_url, props);
     }
   }, []);
 
   const curAcct = props.currentAcct;
-  console.log("loading dashboard account_id", account_id, " props ", props, " current account ", curAcct);
+  console.log(
+    "loading dashboard account_id",
+    account_id,
+    " props ",
+    props,
+    " current account ",
+    curAcct
+  );
   return (
     <Layout>
       <Layout>
@@ -74,10 +82,21 @@ function Dashboard(props) {
             margin: "0",
           }}
         >
+          <Header className="header">
+            <div className="logo" />
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={["2"]}
+              items={[
+                { key: "1", label: "Hi" },
+                { key: "2", label: "Hello" },
+              ]}
+            />
+          </Header>
           <div
             style={{
               padding: 30,
-              background: colorBgContainer,
               minHeight: "100vh",
               overflow: "auto",
             }}

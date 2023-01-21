@@ -1,11 +1,26 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, SignalFilled } from "@ant-design/icons";
+import { fetchAccount } from "../../store/actions/AccountActions";
 import moment from "moment";
 import _ from "underscore";
 
-function DashboardTable(props) {
+function WalletSummaryTable(props) {
+  const riskColor = (risk, name) => {
+    if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
+    if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
+    if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
+  };
+
+  const riskTriggeredColor = (text) => {
+    var riskArr = [];
+    text.forEach((risk) => {
+      riskArr.push(riskColor(risk.risk, risk.name));
+    });
+    return riskArr;
+  };
+
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -98,7 +113,7 @@ function DashboardTable(props) {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    render: (text) => moment.unix(text).format("MMM DD, YYYY LT"),
+    render: (text) => moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
   });
 
   const columns = [
@@ -106,62 +121,115 @@ function DashboardTable(props) {
       title: "Risk",
       dataIndex: "risk",
       key: "risk",
+      filters: [
+        {
+          text: "High",
+          value: "High",
+        },
+        {
+          text: "Medium",
+          value: "Medium",
+        },
+        {
+          text: "Low",
+          value: "Low",
+        },
+      ],
+      filterMode: "tree",
+      filterSearch: true,
+      onFilter: (value, record) => record.risk.startsWith(value),
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Risk Triggered",
+      dataIndex: "riskTriggered",
+      key: "riskTriggered",
+    },
+    {
+      title: "Asset",
+      dataIndex: "asset",
+      key: "asset",
+      filters: [
+        {
+          text: "ETH",
+          value: "ETH",
+        },
+        {
+          text: "BNB",
+          value: "BNB",
+        },
+        {
+          text: "BTC",
+          value: "BTC",
+        },
+      ],
+      filterMode: "tree",
+      filterSearch: true,
+      onFilter: (value, record) => record.asset.startsWith(value),
+    },
+    {
+      title: "Input (USD)",
+      dataIndex: "input",
+      key: "input",
+      render: (text) => text + " USD",
+      sorter: (a, b) => a.input - b.input,
+    },
+    {
+      title: "Output (USD)",
+      dataIndex: "output",
+      key: "output",
+      render: (text) => text + " USD",
+      sorter: (a, b) => a.output - b.output,
+    },
+    {
+      title: "Customer",
+      dataIndex: "customer",
+      key: "customer",
     },
     {
       title: "Date/Time",
       dataIndex: "date",
       key: "date",
       ...getColumnSearchProps("date"),
-    },
-    {
-      title: "Asset",
-      dataIndex: "asset",
-      key: "asset",
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
-    },
-    {
-      title: "Transaction ID",
-      dataIndex: "transactionId",
-      key: "transactionId",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "From",
-      dataIndex: "fromId",
-      key: "fromId",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "To",
-      dataIndex: "toId",
-      key: "toId",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Entity",
-      dataIndex: "entity",
-      key: "entity",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Geo",
-      dataIndex: "geo",
-      key: "geo",
+      filterIcon: <SignalFilled />,
     },
   ];
 
   console.log("loading txn table, props ", props);
   const data = [];
-  for (const txn of props.transactions) {
-    data.push({ key: txn.id, transactionId: txn.id, date: txn.date });
-  }
+  // for (const txn of props.transactions) {
+  //   console.log("txn", txn);
+  //   data.push({
+  //     key: txn.id,
+  //     transactionId: txn.id,
+  //     risk: txn.risk,
+  //     address: txn.address,
+  //     riskTriggered: txn.riskTriggered,
+  //     asset: txn.asset,
+  //     input: txn.input,
+  //     output: txn.output,
+  //     customer: txn.customer,
+  //     date: txn.date,
+  //   });
+  // }
   if (!_.isEmpty(props.currentAcct)) {
     for (const txn of props.currentAcct.transactions) {
-      data.push({ key: txn.id, transactionId: txn.id, date: txn.date });
+      data.push({
+        key: txn.id,
+        transactionId: txn.id,
+        risk: riskColor(txn.risk, txn.risk),
+        address: txn.address,
+        riskTriggered: riskTriggeredColor(txn.riskTriggered),
+        asset: txn.asset,
+        input: txn.input,
+        output: txn.output,
+        customer: txn.customer,
+        date: txn.date,
+      });
     }
   }
 
@@ -169,13 +237,15 @@ function DashboardTable(props) {
     <Table
       columns={columns}
       dataSource={data}
-      pagination={{ position: ["topRight"] }}
+      pagination={{ position: ["bottomRight"] }}
+      rowClassName="tableRow"
     />
   );
 }
 
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     currentAcct: state.accounts.currentAcct,
     accounts: state.accounts.accounts,
@@ -183,4 +253,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(DashboardTable);
+export default connect(mapStateToProps)(WalletSummaryTable);
