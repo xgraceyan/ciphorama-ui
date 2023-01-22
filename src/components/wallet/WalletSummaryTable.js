@@ -146,7 +146,9 @@ function WalletSummaryTable(props) {
       title: "Address",
       dataIndex: "address",
       key: "address",
-      render: (text, record) => <Link to={"/wallet-details/" + record.key}>{text}</Link>
+      render: (text, record) => (
+        <Link to={"/wallet-details/" + record.key}>{text}</Link>
+      ),
     },
     {
       title: "Risk Triggered",

@@ -75,7 +75,7 @@ function WalletDetails(props) {
         <WalletNavbar activeKey={2} />
 
         <div style={{ padding: "2rem 3rem", minHeight: "calc(100vh - 64px)" }}>
-          {props.currentAcct ? (
+          {props.currentAcct.id ? (
             <Row align="middle" justify="space-between" gutter={32}>
               <Col
                 span={24}
@@ -86,10 +86,7 @@ function WalletDetails(props) {
                 }}
               >
                 <h1 style={{ fontSize: "1.8rem" }}>
-                  <span>
-                    Wallet Address:{" "}
-                    {props.currentAcct ? props.currentAcct.id : null}
-                  </span>
+                  <span>Wallet Address: {props.currentAcct.id}</span>
                   &nbsp;
                   <span>
                     <Tooltip
@@ -212,7 +209,9 @@ function WalletDetails(props) {
                 />
               </Col>
             </Row>
-          ) : null}
+          ) : (
+            <h1>Invalid ID</h1>
+          )}
           <Divider />
           <Tabs
             onChange={() => {}}

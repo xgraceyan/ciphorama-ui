@@ -98,7 +98,7 @@
       "ownerId": "2",
       "type": "services",
       "country": "ASIA",
-      "risk": "High",
+      "risk": "Medium",
       "currentBalance": 123.0,
       "received": 123.0,
       "receivedTransactions": 123890,

@@ -141,3 +141,14 @@ code {
   flex: 0 0 49% !important;
   max-width: 49% !important;
 }
+
+.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-dark .ant-menu-item:active,
+.ant-menu-dark .ant-menu-submenu-title {
+  background-color: transparent !important;
+  font-weight: bolder;
+}
+
+.ant-menu-dark .ant-menu {
+  background-color: #112545 !important;
+}

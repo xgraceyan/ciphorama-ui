@@ -4,22 +4,9 @@ import Search from "antd/es/transfer/search";
 import { SettingFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-const WalletNavbar = ({ activeKey }) => {
-  console.log("activekey>>> ", activeKey);
+const Navbar = () => {
   return (
     <Header className="header nav-header">
-      <div
-        className="logo"
-        style={{
-          float: "left",
-          margin: "-2px 24px 0px 0",
-          overflow: "hidden",
-        }}
-      >
-        <Link to="/" style={{ all: "unset", cursor: "pointer" }}>
-          <h1 style={{ textAlign: "center", margin: 0 }}>Ciphorama</h1>
-        </Link>
-      </div>
       <div
         className="nav-right"
         style={{ float: "right", margin: "0px 24px 16px 0" }}
@@ -61,7 +48,6 @@ const WalletNavbar = ({ activeKey }) => {
         className="navbar"
         theme="light"
         mode="horizontal"
-        defaultSelectedKeys={[activeKey.toString()]}
         items={[
           {
             key: "1",
@@ -79,4 +65,4 @@ const WalletNavbar = ({ activeKey }) => {
   );
 };
 
-export default WalletNavbar;
+export default Navbar;

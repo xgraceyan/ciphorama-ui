@@ -30,6 +30,7 @@ import Search from "antd/es/input/Search";
 import thunk from "redux-thunk";
 import { fetchAccount } from "./store/actions/AccountActions";
 import { Header } from "antd/es/layout/layout";
+import Navbar from "./components/Navbar";
 
 var jsonQuery = require("json-query");
 
@@ -82,18 +83,7 @@ function Dashboard(props) {
             margin: "0",
           }}
         >
-          <Header className="header">
-            <div className="logo" />
-            <Menu
-              theme="dark"
-              mode="horizontal"
-              defaultSelectedKeys={["2"]}
-              items={[
-                { key: "1", label: "Hi" },
-                { key: "2", label: "Hello" },
-              ]}
-            />
-          </Header>
+          <Navbar />
           <div
             style={{
               padding: 30,
