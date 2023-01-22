@@ -12,6 +12,7 @@ import WalletNavbar from "./WalletNavbar";
 import { fetchAccounts } from "../../store/actions/AccountActions";
 import { connect } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+import Sidebar from "../Sidebar";
 
 function WalletSummary(props) {
   const graph_url = "http://localhost:3001/accounts/";
@@ -42,55 +43,57 @@ function WalletSummary(props) {
   );
   return (
     <Layout>
-      <WalletNavbar />
-      <Content
-        style={{ padding: "2rem 5rem", minHeight: "calc(100vh - 64px)" }}
-      >
-        <Row justify="space-around" align="middle">
-          <Col span={12} align="left">
-            <p style={{ fontSize: "1.5rem" }}>Wallets Screened</p>
-          </Col>
-          <Col span={12} align="right">
-            <Button
-              type="text"
-              style={{
-                fontSize: "1rem",
-              }}
-              icon={<FilterFilled />}
-            >
-              Filter
-            </Button>
-            <Button
-              type="text"
-              style={{
-                fontSize: "1rem",
-              }}
-              icon={<ScanOutlined />}
-            >
-              Screen Wallet
-            </Button>
-            <Button
-              type="text"
-              style={{
-                fontSize: "1rem",
-              }}
-              icon={<UploadOutlined />}
-            >
-              Upload a File
-            </Button>
-            <Button
-              type="text"
-              style={{
-                fontSize: "1rem",
-              }}
-              icon={<ExportOutlined />}
-            >
-              Export Wallet
-            </Button>
-          </Col>
-        </Row>
-        <Divider />
-        <WalletSummaryTable />
+      <Sidebar />
+
+      <Content>
+        <WalletNavbar activeKey={1} />
+        <div style={{ padding: "2rem 3rem", minHeight: "calc(100vh - 64px)" }}>
+          <Row justify="space-around" align="middle">
+            <Col span={12} align="left" className="wallet-summary-title">
+              <p style={{ fontSize: "1.5rem" }}>Wallets Screened</p>
+            </Col>
+            <Col span={12} align="right">
+              <Button
+                type="text"
+                style={{
+                  fontSize: "1rem",
+                }}
+                icon={<FilterFilled />}
+              >
+                Filter
+              </Button>
+              <Button
+                type="text"
+                style={{
+                  fontSize: "1rem",
+                }}
+                icon={<ScanOutlined />}
+              >
+                Screen Wallet
+              </Button>
+              <Button
+                type="text"
+                style={{
+                  fontSize: "1rem",
+                }}
+                icon={<UploadOutlined />}
+              >
+                Upload a File
+              </Button>
+              <Button
+                type="text"
+                style={{
+                  fontSize: "1rem",
+                }}
+                icon={<ExportOutlined />}
+              >
+                Export Wallet
+              </Button>
+            </Col>
+          </Row>
+          <Divider />
+          <WalletSummaryTable />
+        </div>
       </Content>
     </Layout>
   );

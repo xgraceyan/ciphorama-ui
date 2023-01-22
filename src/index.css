@@ -5,11 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: scroll;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.ant-layout-content {
+  background-color: white;
 }
 
 /* sidebar trigger */
@@ -122,4 +127,17 @@ code {
 
 .tableRow:nth-child(odd) {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.tableRowAlt:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.wallet-details-col {
+  margin-top: 15px;
+  padding: 1rem 2rem 2rem 2rem !important;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  flex: 0 0 49% !important;
+  max-width: 49% !important;
 }

@@ -13,16 +13,7 @@ const { Sider } = Layout;
 
 const Sidebar = () => {
   return (
-    <Sider
-      breakpoint="lg"
-      collapsedWidth="0"
-      onBreakpoint={(broken) => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
-      }}
-    >
+    <Sider breakpoint="lg" collapsedWidth="0">
       <div
         className="logo"
         style={{
@@ -34,6 +25,7 @@ const Sidebar = () => {
             fontSize: "2rem",
             margin: "2rem 0",
             color: "white",
+            textAlign: "center",
           }}
         >
           Ciphorama
@@ -42,6 +34,7 @@ const Sidebar = () => {
           style={{
             color: "white",
             fontSize: "1rem",
+            textAlign: "center",
           }}
         >
           Ethereum Taint Tracing

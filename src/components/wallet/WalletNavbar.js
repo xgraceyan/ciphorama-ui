@@ -3,14 +3,19 @@ import { Header } from "antd/es/layout/layout";
 import Search from "antd/es/transfer/search";
 import { SettingFilled } from "@ant-design/icons";
 
-const WalletNavbar = () => {
+const WalletNavbar = ({ activeKey }) => {
+  console.log("activekey>>> ", activeKey);
   return (
     <Header className="header nav-header">
       <div
         className="logo"
-        style={{ float: "left", margin: "-20px 24px 16px 0" }}
+        style={{
+          float: "left",
+          margin: "-2px 24px 0px 0",
+          overflow: "hidden",
+        }}
       >
-        <h1 style={{ textAlign: "center" }}>Ciphorama</h1>
+        <h1 style={{ textAlign: "center", margin: 0 }}>Ciphorama</h1>
       </div>
       <div
         className="nav-right"
@@ -53,7 +58,7 @@ const WalletNavbar = () => {
         className="navbar"
         theme="light"
         mode="horizontal"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={[activeKey.toString()]}
         items={[
           { key: "1", label: "Wallets" },
           { key: "2", label: "Transactions" },
