@@ -140,7 +140,7 @@ function WalletSummaryTable(props) {
       ],
       filterMode: "tree",
       filterSearch: true,
-      onFilter: (value, record) => record.risk.startsWith(value),
+      onFilter: (value, record) => record.risk.props.children.startsWith(value),
     },
     {
       title: "Address",
