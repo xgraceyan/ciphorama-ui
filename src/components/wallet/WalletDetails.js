@@ -25,15 +25,17 @@ function WalletDetails(props) {
     if (
       !props.accounts ||
       props.accounts.length == 0 ||
-      !props.accounts[0].id == account_id
+      !props.currentAcct || 
+      props.currentAcct.id != account_id
     ) {
+      console.log("WalletDetails fetching account_id :", account_id);
       props.fetchAccount(account_id, graph_url, props);
     }
   }, []);
 
   const curAcct = props.currentAcct;
   console.log(
-    "loading dashboard account_id",
+    "loading WalletDetails account_id",
     account_id,
     " props ",
     props,

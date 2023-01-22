@@ -19,7 +19,9 @@ var jsonQuery = require("json-query");
 
 var _ = require("underscore");
 
-function AccountDetails({ account }) {
+function AccountDetails({ props }) {
+  console.log("AccountDetails props:", props);
+  const account = props; //props.currentAcct;
   if (!_.isEmpty(account)) {
     return (
       <section className="stats-section">
@@ -123,7 +125,8 @@ function AccountDetails({ account }) {
 
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
-  return {
+  return {  
+    currentAcct: state.accounts.currentAcct,
     accounts: state.accounts.accounts,
     transactions: state.transactions.transactions,
   };

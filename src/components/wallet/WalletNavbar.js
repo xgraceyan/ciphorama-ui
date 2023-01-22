@@ -10,7 +10,7 @@ const WalletNavbar = () => {
         className="logo"
         style={{ float: "left", margin: "-20px 24px 16px 0" }}
       >
-        <h1 style={{ textAlign: "center" }}>Your Company Name</h1>
+        <h1 style={{ textAlign: "center" }}>Ciphorama</h1>
       </div>
       <div
         className="nav-right"

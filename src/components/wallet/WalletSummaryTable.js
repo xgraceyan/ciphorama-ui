@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
 import { fetchAccount } from "../../store/actions/AccountActions";
@@ -7,6 +8,8 @@ import moment from "moment";
 import _ from "underscore";
 
 function WalletSummaryTable(props) {
+  const navigate = useNavigate();
+
   const riskColor = (risk, name) => {
     if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
     if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
@@ -143,6 +146,7 @@ function WalletSummaryTable(props) {
       title: "Address",
       dataIndex: "address",
       key: "address",
+      render: (text, record) => <Link to={"/wallet-details/" + record.key}>{text}</Link>
     },
     {
       title: "Risk Triggered",
@@ -199,36 +203,21 @@ function WalletSummaryTable(props) {
     },
   ];
 
-  console.log("loading txn table, props ", props);
+  console.log("loading account table, props ", props);
   const data = [];
-  // for (const txn of props.transactions) {
-  //   console.log("txn", txn);
-  //   data.push({
-  //     key: txn.id,
-  //     transactionId: txn.id,
-  //     risk: txn.risk,
-  //     address: txn.address,
-  //     riskTriggered: txn.riskTriggered,
-  //     asset: txn.asset,
-  //     input: txn.input,
-  //     output: txn.output,
-  //     customer: txn.customer,
-  //     date: txn.date,
-  //   });
-  // }
   if (!_.isEmpty(props.accounts)) {
-    for (const txn of props.accounts[0]) {
+    for (const acct of props.accounts) {
       data.push({
-        key: txn.id,
-        transactionId: txn.id,
-        risk: riskColor(txn.risk, txn.risk),
-        address: txn.address,
-        riskTriggered: riskTriggeredColor(txn.riskTriggered),
-        asset: txn.asset,
-        input: txn.input,
-        output: txn.output,
-        customer: txn.customer,
-        date: txn.screenedTime,
+        key: acct.id,
+        transactionId: acct.id,
+        risk: riskColor(acct.risk, acct.risk),
+        address: acct.address,
+        riskTriggered: riskTriggeredColor(acct.riskTriggered),
+        asset: acct.asset,
+        input: acct.input,
+        output: acct.output,
+        customer: acct.customer,
+        date: acct.screenedTime,
       });
     }
   }

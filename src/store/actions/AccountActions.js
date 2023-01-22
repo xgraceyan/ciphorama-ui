@@ -8,7 +8,7 @@ export const fetchAccount = (account, graph_url, props) => {
       .then(
         (acct) => {
           console.log(
-            "graph ajax request:",
+            "fetching single account request:",
             accounts_url,
             " acct: ",
             acct,
@@ -38,21 +38,21 @@ export const fetchAccounts = (graph_url, props) => {
     fetch(accounts_url, { method: "GET" })
       .then((response) => response.json())
       .then(
-        (acct) => {
+        (accounts) => {
           console.log(
-            "graph ajax request:",
+            "fetching all accounts: ",
             accounts_url,
-            " acct: ",
-            acct,
+            " accounts: ",
+            accounts,
             " props:",
             props
           );
-          if (!_.isEmpty(acct)) {
-            dispatch({ type: "ACCOUNT_LOADING_SUCCESS", account: acct });
+          if (!_.isEmpty(accounts)) {
+            dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", accounts: accounts });
           } else {
             dispatch({
               type: "ACCOUNT_LOADING_FAILURE",
-              error: "empty account",
+              error: "empty accounts",
             });
           }
         },
