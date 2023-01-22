@@ -55,7 +55,7 @@ const Sidebar = () => {
         defaultSelectedKeys={["0"]}
         items={[
           {
-            label: "Dashboard",
+            label: <Link to="/">Dashboard</Link>,
             icon: <DashboardOutlined />,
             key: "0",
           },
