@@ -9,13 +9,12 @@ import {
 import React from "react";
 import WalletSummaryTable from "./WalletSummaryTable";
 import WalletNavbar from "./WalletNavbar";
-import { fetchAccount } from "../../store/actions/AccountActions";
+import { fetchAccounts } from "../../store/actions/AccountActions";
 import { connect } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
 function WalletSummary(props) {
   const graph_url = "http://localhost:3001/accounts/";
-  let { account_id } = useParams();
   const local_state = React.useState();
   const [state, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -28,20 +27,14 @@ function WalletSummary(props) {
   };
 
   React.useEffect(() => {
-    console.log("Dashboard Mounted with props: ", props);
-    if (
-      !props.accounts ||
-      props.accounts.length == 0 ||
-      !props.accounts[0].id == account_id
-    ) {
-      props.fetchAccount(account_id, graph_url, props);
+    if (!props.accounts || props.accounts.length == 0) {
+      props.fetchAccounts(graph_url, props);
     }
   }, []);
 
   const curAcct = props.currentAcct;
   console.log(
     "loading dashboard account_id",
-    account_id,
     " props ",
     props,
     " current account ",
@@ -114,8 +107,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAccount: (account, graph_url) =>
-      dispatch(fetchAccount(account, graph_url)),
+    fetchAccounts: (graph_url) => dispatch(fetchAccounts(graph_url)),
   };
 };
 

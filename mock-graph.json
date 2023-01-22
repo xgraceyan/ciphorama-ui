@@ -45,54 +45,46 @@
       "ownerId": "1",
       "type": "services",
       "country": "US",
-      "risk": 9,
+      "risk": "High",
       "currentBalance": 123.0,
       "received": 123.0,
       "receivedTransactions": 123890,
       "sent": 2,
       "sentTransactions": 2,
+      "screenedTime": 1673312410,
+      "asset": "ETH",
+      "address": "0xa2",
+      "riskTriggered": [
+        { "name": "Terrorist Organization", "risk": "High" },
+        { "name": "P2P Crypto Marketplace", "risk": "Medium" }
+      ],
+      "input": 247980.49,
+      "output": 24798.05,
+      "customer": "John Smith",
       "transactions": [
         {
           "id": "0xT1",
           "risk": "High",
-          "date": 1673312410,
+          "riskTriggered": "Terrorist Organization",
+          "direction": "Inbound",
+          "counterAddress": "0xa2",
+          "counterEntity": "ISIS-Mozambique",
           "asset": "ETH",
-          "address": "0xa2",
-          "riskTriggered": [
-            { "name": "Terrorist Organization", "risk": "High" },
-            { "name": "P2P Crypto Marketplace", "risk": "Medium" }
-          ],
-          "input": 247980.49,
-          "output": 24798.05,
-          "customer": "John Smith"
+          "volume": 24798.05,
+          "customer": "John Smith",
+          "activityTime": 1583324681
         },
         {
           "id": "0xT2",
           "risk": "Medium",
-          "date": 1583324681,
+          "riskTriggered": "Terrorist Organization",
+          "direction": "Inbound",
+          "counterAddress": "0xa2",
+          "counterEntity": "ISIS-Mozambique",
           "asset": "ETH",
-          "address": "0xa3",
-          "riskTriggered": [
-            { "name": "Dark Forum", "risk": "Medium" },
-            { "name": "Sports Betting", "risk": "Low" }
-          ],
-          "input": 240280.58,
-          "output": 24028.06,
-          "customer": "Bryan Hyde"
-        },
-        {
-          "id": "0xT3",
-          "risk": "Low",
-          "date": 1673313589,
-          "asset": "BNB",
-          "address": "0xb1",
-          "riskTriggered": [
-            { "name": "Gamling", "risk": "Low" },
-            { "name": "Sports Betting", "risk": "Low" }
-          ],
-          "input": 198376.86,
-          "output": 19837.69,
-          "customer": "Unknown"
+          "volume": 24798.05,
+          "customer": "John Smith",
+          "activityTime": 1583324681
         }
       ]
     },
@@ -102,88 +94,48 @@
       "ownerId": "2",
       "type": "services",
       "country": "ASIA",
-      "risk": 2,
-      "currentBalance": 567.0,
-      "received": 567.0,
-      "receivedTransactions": 567890,
+      "risk": "High",
+      "currentBalance": 123.0,
+      "received": 123.0,
+      "receivedTransactions": 123890,
       "sent": 2,
       "sentTransactions": 2,
+      "screenedTime": 1673312410,
+      "asset": "ETH",
+      "address": "0xa2",
+      "riskTriggered": [
+        { "name": "Terrorist Organization", "risk": "High" },
+        { "name": "P2P Crypto Marketplace", "risk": "Medium" }
+      ],
+      "input": 247980.49,
+      "output": 24798.05,
+      "customer": "John Smith",
       "transactions": [
         {
-          "id": "0xT3",
-          "amount": 30,
-          "risk": 1,
-          "date": 1673332410,
-          "asset": null,
-          "fromAccount": "0xa2",
-          "toAccount": "0xa3",
-          "entityName": "Uniswap",
-          "entityType": "services",
-          "geo": "US"
+          "id": "0xT1",
+          "risk": "High",
+          "riskTriggered": "Terrorist Organization",
+          "direction": "Inbound",
+          "counterAddress": "0xa2",
+          "counterEntity": "ISIS-Mozambique",
+          "asset": "ETH",
+          "volume": 24798.05,
+          "customer": "John Smith",
+          "activityTime": 1583324681
         },
         {
-          "id": "0xT4",
-          "amount": 40,
-          "risk": 1,
-          "date": 1673332410,
-          "asset": null,
-          "fromAccount": "0xa2",
-          "toAccount": "0xa1",
-          "entityName": "Uniswap",
-          "entityType": "services",
-          "geo": "US"
+          "id": "0xT2",
+          "risk": "Medium",
+          "riskTriggered": "Terrorist Organization",
+          "direction": "Inbound",
+          "counterAddress": "0xa2",
+          "counterEntity": "ISIS-Mozambique",
+          "asset": "ETH",
+          "volume": 24798.05,
+          "customer": "John Smith",
+          "activityTime": 1583324681
         }
       ]
-    }
-  ],
-  "transactions": [
-    {
-      "id": "0xT1",
-      "amount": 10,
-      "risk": 1,
-      "date": 1673312410,
-      "asset": null,
-      "fromAccount": "0xa1",
-      "toAccount": "0xa2",
-      "entityName": "Uniswap",
-      "entityType": "services",
-      "geo": "US"
-    },
-    {
-      "id": "0xT2",
-      "amount": 20,
-      "risk": 1,
-      "date": 1673322410,
-      "asset": null,
-      "fromAccount": "0xa1",
-      "toAccount": "0xa3",
-      "entityName": "Uniswap",
-      "entityType": "services",
-      "geo": "US"
-    },
-    {
-      "id": "0xT3",
-      "amount": 30,
-      "risk": 1,
-      "date": 1673332410,
-      "asset": null,
-      "fromAccount": "0xa2",
-      "toAccount": "0xa3",
-      "entityName": "Uniswap",
-      "entityType": "services",
-      "geo": "US"
-    },
-    {
-      "id": "0xT4",
-      "amount": 40,
-      "risk": 1,
-      "date": 1673332410,
-      "asset": null,
-      "fromAccount": "0xa2",
-      "toAccount": "0xa1",
-      "entityName": "Uniswap",
-      "entityType": "services",
-      "geo": "US"
     }
   ]
 }

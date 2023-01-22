@@ -6,7 +6,7 @@ import { fetchAccount } from "../../store/actions/AccountActions";
 import moment from "moment";
 import _ from "underscore";
 
-function WalletSummaryTable(props) {
+function WalletDetailsTable(props) {
   const riskColor = (risk, name) => {
     if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
     if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
@@ -118,31 +118,9 @@ function WalletSummaryTable(props) {
 
   const columns = [
     {
-      title: "Risk",
+      title: "Risk Severity",
       dataIndex: "risk",
       key: "risk",
-      filters: [
-        {
-          text: "High",
-          value: "High",
-        },
-        {
-          text: "Medium",
-          value: "Medium",
-        },
-        {
-          text: "Low",
-          value: "Low",
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: true,
-      onFilter: (value, record) => record.risk.startsWith(value),
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
     },
     {
       title: "Risk Triggered",
@@ -150,40 +128,36 @@ function WalletSummaryTable(props) {
       key: "riskTriggered",
     },
     {
+      title: "Direction",
+      dataIndex: "direction",
+      key: "direction",
+    },
+    {
+      title: "Counterparty Address",
+      dataIndex: "counterAddress",
+      key: "counterAddress",
+    },
+    {
+      title: "Counterparty Entity",
+      dataIndex: "counterEntity",
+      key: "counterEntity",
+    },
+    {
+      title: "Direction",
+      dataIndex: "direction",
+      key: "direction",
+    },
+    {
       title: "Asset",
       dataIndex: "asset",
       key: "asset",
-      filters: [
-        {
-          text: "ETH",
-          value: "ETH",
-        },
-        {
-          text: "BNB",
-          value: "BNB",
-        },
-        {
-          text: "BTC",
-          value: "BTC",
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: true,
-      onFilter: (value, record) => record.asset.startsWith(value),
     },
     {
-      title: "Input (USD)",
-      dataIndex: "input",
-      key: "input",
+      title: "Volume (USD)",
+      dataIndex: "volume",
+      key: "volume",
       render: (text) => text + " USD",
-      sorter: (a, b) => a.input - b.input,
-    },
-    {
-      title: "Output (USD)",
-      dataIndex: "output",
-      key: "output",
-      render: (text) => text + " USD",
-      sorter: (a, b) => a.output - b.output,
+      sorter: (a, b) => a.volume - b.volume,
     },
     {
       title: "Customer",
@@ -191,7 +165,7 @@ function WalletSummaryTable(props) {
       key: "customer",
     },
     {
-      title: "Date/Time",
+      title: "Activity Time",
       dataIndex: "date",
       key: "date",
       ...getColumnSearchProps("date"),
@@ -201,34 +175,21 @@ function WalletSummaryTable(props) {
 
   console.log("loading txn table, props ", props);
   const data = [];
-  // for (const txn of props.transactions) {
-  //   console.log("txn", txn);
-  //   data.push({
-  //     key: txn.id,
-  //     transactionId: txn.id,
-  //     risk: txn.risk,
-  //     address: txn.address,
-  //     riskTriggered: txn.riskTriggered,
-  //     asset: txn.asset,
-  //     input: txn.input,
-  //     output: txn.output,
-  //     customer: txn.customer,
-  //     date: txn.date,
-  //   });
-  // }
-  if (!_.isEmpty(props.accounts)) {
-    for (const txn of props.accounts[0]) {
+  if (!_.isEmpty(props.currentAcct)) {
+    for (const txn of props.currentAcct.transactions) {
+      console.log("txn", txn);
       data.push({
         key: txn.id,
         transactionId: txn.id,
         risk: riskColor(txn.risk, txn.risk),
-        address: txn.address,
-        riskTriggered: riskTriggeredColor(txn.riskTriggered),
+        riskTriggered: riskColor(txn.risk, txn.riskTriggered),
+        direction: txn.direction,
+        counterAddress: txn.counterAddress,
+        counterEntity: txn.counterEntity,
         asset: txn.asset,
-        input: txn.input,
-        output: txn.output,
+        volume: txn.volume,
         customer: txn.customer,
-        date: txn.screenedTime,
+        date: txn.activityTime,
       });
     }
   }
@@ -253,4 +214,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(WalletSummaryTable);
+export default connect(mapStateToProps)(WalletDetailsTable);
