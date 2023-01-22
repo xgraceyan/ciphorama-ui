@@ -173,7 +173,7 @@ function WalletDetailsTable(props) {
     },
   ];
 
-  console.log("loading txn table, props ", props);
+  console.log("loading WalletDetailsTable props ", props);
   const data = [];
   if (!_.isEmpty(props.currentAcct)) {
     for (const txn of props.currentAcct.transactions) {
@@ -206,7 +206,6 @@ function WalletDetailsTable(props) {
 
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     currentAcct: state.accounts.currentAcct,
     accounts: state.accounts.accounts,
