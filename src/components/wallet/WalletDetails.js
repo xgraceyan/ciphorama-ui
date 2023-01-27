@@ -21,6 +21,7 @@ import WalletDetailsTable from "./WalletDetailsTable";
 import WalletNavbar from "./WalletNavbar";
 import moment from "moment";
 import WalletScanTable from "./WalletScanTable";
+import WalletGraphView from "./WalletGraphView";
 
 function WalletDetails(props) {
   const graph_url = "http://localhost:3001/accounts/";
@@ -74,7 +75,7 @@ function WalletDetails(props) {
         <WalletNavbar />
 
         <div style={{ padding: "2rem 3rem", minHeight: "calc(100vh - 64px)" }}>
-          {props.currentAcct.id ? (
+          {props.currentAcct != null ? (
             <Row align="middle" justify="space-between" gutter={32}>
               <Col
                 span={24}
@@ -224,7 +225,7 @@ function WalletDetails(props) {
               {
                 key: "2",
                 label: "Graph View",
-                children: "Graph View",
+                children: <WalletGraphView />,
               },
               {
                 key: "3",
