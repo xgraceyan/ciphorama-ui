@@ -4,8 +4,7 @@ import Search from "antd/es/transfer/search";
 import { SettingFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-const WalletNavbar = ({ activeKey }) => {
-  console.log("activekey>>> ", activeKey);
+const WalletNavbar = () => {
   return (
     <Header className="header nav-header">
       <div
@@ -61,18 +60,13 @@ const WalletNavbar = ({ activeKey }) => {
         className="navbar"
         theme="light"
         mode="horizontal"
-        defaultSelectedKeys={[activeKey.toString()]}
+        defaultSelectedKeys={["0"]}
         items={[
           {
             key: "1",
             label: <Link to="/wallet-summary">Wallets</Link>,
-            title: <Link to="/wallet-summary">Wallets</Link>,
+            className: "wallet-nav-selected",
           },
-          { key: "2", label: "Transactions" },
-          { key: "3", label: "Forensics" },
-          { key: "4", label: "Cases" },
-          { key: "5", label: "Reports" },
-          { key: "6", label: "KYB" },
         ]}
       />
     </Header>

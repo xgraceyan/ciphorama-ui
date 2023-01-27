@@ -20,6 +20,7 @@ import Sidebar from "../Sidebar";
 import WalletDetailsTable from "./WalletDetailsTable";
 import WalletNavbar from "./WalletNavbar";
 import moment from "moment";
+import WalletScanTable from "./WalletScanTable";
 
 function WalletDetails(props) {
   const graph_url = "http://localhost:3001/accounts/";
@@ -69,10 +70,8 @@ function WalletDetails(props) {
 
   return (
     <Layout>
-      <Sidebar />
-
       <Content>
-        <WalletNavbar activeKey={2} />
+        <WalletNavbar />
 
         <div style={{ padding: "2rem 3rem", minHeight: "calc(100vh - 64px)" }}>
           {props.currentAcct.id ? (
@@ -235,7 +234,7 @@ function WalletDetails(props) {
               {
                 key: "4",
                 label: "Scanning History",
-                children: "Scanning History",
+                children: <WalletScanTable />,
               },
             ]}
             tabBarGutter={10}

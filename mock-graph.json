@@ -90,6 +90,26 @@
           "customer": "account a3",
           "activityTime": 1583724681
         }
+      ],
+      "scans": [
+        {
+          "id": "0xS11",
+          "scanTime": 1583724681,
+          "scannedBy": "Allan Sheth",
+          "risk": "High",
+          "category": "Terrorist Organization",
+          "asset": "ETH",
+          "volume": 24798.05
+        },
+        {
+          "id": "0xS12",
+          "scanTime": 1583722769,
+          "scannedBy": "System",
+          "risk": "Medium",
+          "category": "Dark Forum",
+          "asset": "ETH",
+          "volume": 24028.06
+        }
       ]
     },
     {
@@ -139,6 +159,26 @@
           "customer": "Account a3",
           "activityTime": 1583024681
         }
+      ],
+      "scans": [
+        {
+          "id": "0xS21",
+          "scanTime": 1583724681,
+          "scannedBy": "Allan Sheth",
+          "risk": "High",
+          "category": "Terrorist Organization",
+          "asset": "ETH",
+          "volume": 24798.05
+        },
+        {
+          "id": "0xS22",
+          "scanTime": 1583725930,
+          "scannedBy": "System",
+          "risk": "Medium",
+          "category": "Dark Forum",
+          "asset": "ETH",
+          "volume": 24028.06
+        }
       ]
     },
     {
@@ -187,6 +227,26 @@
           "volume": 322.05,
           "customer": "Account a2",
           "activityTime": 1583524681
+        }
+      ],
+      "scans": [
+        {
+          "id": "0xS31",
+          "scanTime": 1583724681,
+          "scannedBy": "Allan Sheth",
+          "risk": "High",
+          "category": "Terrorist Organization",
+          "asset": "ETH",
+          "volume": 24798.05
+        },
+        {
+          "id": "0xS32",
+          "scanTime": 1583725930,
+          "scannedBy": "System",
+          "risk": "Medium",
+          "category": "Dark Forum",
+          "asset": "ETH",
+          "volume": 24028.06
         }
       ]
     }

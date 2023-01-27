@@ -12,16 +12,6 @@ const Navbar = () => {
         style={{ float: "right", margin: "0px 24px 16px 0" }}
       >
         <Space>
-          <div className="nav-search">
-            <Search
-              placeholder="Search for addresses, transactions, cases, and customers..."
-              allowClear
-              onSearch={() => {}}
-              style={{
-                width: 200,
-              }}
-            />
-          </div>
           <div>
             <a href="" className="icon-button">
               <SettingFilled

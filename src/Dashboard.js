@@ -51,63 +51,54 @@ function Dashboard(props) {
   const onSearch = (value) => {
     console.log("on search nav to ", value);
     props.fetchAccount(value, graph_url);
-    navigate("/" + value);
+    navigate("/wallet-details/" + value);
   };
 
-  React.useEffect(() => {
-    console.log("Dashboard Mounted with props: ", props);
-    if (
-      !props.accounts ||
-      props.accounts.length == 0 ||
-      !props.accounts[0].id == account_id
-    ) {
-      props.fetchAccount(account_id, graph_url, props);
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   console.log("Dashboard Mounted with props: ", props);
+  //   if (
+  //     !props.accounts ||
+  //     props.accounts.length == 0 ||
+  //     !props.accounts[0].id == account_id
+  //   ) {
+  //     props.fetchAccount(account_id, graph_url, props);
+  //   }
+  // }, []);
 
-  const curAcct = props.currentAcct;
-  console.log(
-    "loading dashboard account_id",
-    account_id,
-    " props ",
-    props,
-    " current account ",
-    curAcct
-  );
+  // const curAcct = props.currentAcct;
+  // console.log(
+  //   "loading dashboard account_id",
+  //   account_id,
+  //   " props ",
+  //   props,
+  //   " current account ",
+  //   curAcct
+  // );
   return (
     <Layout>
       <Layout>
-        <Sidebar />
+        <Sidebar pageIndex={0} />
         <Content
           style={{
             margin: "0",
           }}
+          className="content"
         >
           <Navbar />
-          <div
-            style={{
-              padding: 30,
-              minHeight: "100vh",
-              overflow: "auto",
-            }}
-          >
+          <div className="dashboard-content content">
             <section className="search-section">
-              <Paragraph>ADDRESS: ETHEREUM (ETH)</Paragraph>
-              <Search
-                placeholder="Lookup address"
-                onSearch={onSearch}
-                enterButton
-                style={{ width: "75%" }}
-              />
-            </section>
-
-            <Divider />
-            <AccountDetails account={curAcct} />
-
-            <Divider />
-
-            <section className="table-section">
-              <DashboardTable />
+              <div className="search-section-element">
+                <h1 style={{ fontSize: 30 }}>Search</h1>
+              </div>
+              <div className="search-section-element">
+                <Search
+                  placeholder="Search for addresses, transactions, cases and customers..."
+                  onSearch={onSearch}
+                  enterButton
+                  style={{ width: "75%" }}
+                  size="large"
+                />
+              </div>
             </section>
           </div>
         </Content>

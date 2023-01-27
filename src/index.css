@@ -5,12 +5,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: scroll;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.content {
+  min-height: calc(100vh - 64px) !important;
 }
 
 .ant-layout-content {
@@ -92,9 +95,6 @@ code {
 }
 
 @media screen and (max-width: 678px) {
-  .logo {
-    margin: -14px 10px 0px -30px !important;
-  }
   .logo h1 {
     font-size: 15px;
   }
@@ -104,6 +104,10 @@ code {
   .ant-space-item:has(> .nav-search) {
     visibility: hidden;
     display: none;
+  }
+  .dashboard-content {
+    padding: 1rem !important;
+    padding-top: 5rem !important;
   }
 }
 
@@ -126,11 +130,11 @@ code {
 }
 
 .tableRow:nth-child(odd) {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .tableRowAlt:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .wallet-details-col {
@@ -151,4 +155,22 @@ code {
 
 .ant-menu-dark .ant-menu {
   background-color: #112545 !important;
+}
+
+.wallet-nav-selected {
+  all: unset !important;
+}
+
+a::before {
+  position: relative !important;
+}
+
+.search-section-element {
+  display: flex;
+  justify-content: center;
+}
+
+.dashboard-content {
+  padding: 5rem;
+  padding-top: 10rem;
 }

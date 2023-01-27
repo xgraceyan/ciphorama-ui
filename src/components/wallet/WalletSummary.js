@@ -47,10 +47,8 @@ function WalletSummary(props) {
   );
   return (
     <Layout>
-      <Sidebar />
-
       <Content>
-        <WalletNavbar activeKey={1} />
+        <WalletNavbar />
         <div style={{ padding: "2rem 3rem", minHeight: "calc(100vh - 64px)" }}>
           <section className="search-section">
             <p style={{ fontSize: "1rem" }}>Search wallet address</p>

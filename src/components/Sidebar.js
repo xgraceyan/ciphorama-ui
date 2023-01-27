@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
 
-const Sidebar = () => {
+const Sidebar = ({ pageIndex = -1 }) => {
   return (
     <Sider
       breakpoint="lg"
@@ -52,7 +52,7 @@ const Sidebar = () => {
         theme="dark"
         mode="inline"
         style={{ backgroundColor: "#112545" }}
-        defaultSelectedKeys={["0"]}
+        defaultSelectedKeys={pageIndex != -1 ? [pageIndex.toString()] : []}
         items={[
           {
             label: <Link to="/">Dashboard</Link>,
