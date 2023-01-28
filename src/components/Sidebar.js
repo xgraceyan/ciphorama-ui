@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Space } from "antd";
 import Title from "antd/es/typography/Title";
 import Paragraph from "antd/es/typography/Paragraph";
 import {
@@ -27,16 +27,19 @@ const Sidebar = ({ pageIndex = -1 }) => {
         }}
       >
         <Link to="/">
-          <Title
-            style={{
-              fontSize: "2rem",
-              margin: "2rem 0",
-              color: "white",
-              textAlign: "center",
-            }}
-          >
-            Ciphorama
-          </Title>
+          <Space>
+            <img src="ciphorama_logo.png" alt="" width="40px" />
+            <Title
+              style={{
+                fontSize: "1.3rem",
+                margin: "2rem 0",
+                color: "white",
+                textAlign: "center",
+              }}
+            >
+              Ciphorama
+            </Title>
+          </Space>
         </Link>
         <Paragraph
           style={{
