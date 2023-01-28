@@ -67,7 +67,7 @@
       "customer": "account a1",
       "transactions": [
         {
-          "id": "0xT12",
+          "id": "0xT11",
           "risk": "High",
           "riskTriggered": "Terrorist Organization",
           "direction": "Inbound",
@@ -76,10 +76,10 @@
           "asset": "ETH",
           "volume": 11.05,
           "customer": "account a2",
-          "activityTime": 1583624681
+          "activityTime": 1582624681
         },
         {
-          "id": "0xT13",
+          "id": "0xT12",
           "risk": "Medium",
           "riskTriggered": "Terrorist Organization",
           "direction": "Inbound",
@@ -89,6 +89,30 @@
           "volume": 12.05,
           "customer": "account a3",
           "activityTime": 1583724681
+        },
+        {
+          "id": "0xT13",
+          "risk": "Medium",
+          "riskTriggered": "Terrorist Organization",
+          "direction": "Outbound",
+          "counterAddress": "0xa3",
+          "counterEntity": "ISIS-Mozambique",
+          "asset": "ETH",
+          "volume": 12.05,
+          "customer": "account a3",
+          "activityTime": 1558724681
+        },
+        {
+          "id": "0xT14",
+          "risk": "Medium",
+          "riskTriggered": "Terrorist Organization",
+          "direction": "Outbound",
+          "counterAddress": "0xa3",
+          "counterEntity": "ISIS-Mozambique",
+          "asset": "ETH",
+          "volume": 12.05,
+          "customer": "account a3",
+          "activityTime": 1627724681
         }
       ],
       "scans": [

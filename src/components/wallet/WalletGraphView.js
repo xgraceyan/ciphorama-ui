@@ -1,41 +1,30 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useNavigate, redirect, useHistory } from "react-router-dom";
 import G6 from "@antv/g6";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import _ from "underscore";
+import moment from "moment";
 var ReactDOM = require("react-dom");
 
 function WalletGraphView(props) {
   const ref = React.useRef(null);
   const [graph, setGraph] = useState(null);
+  var yCoord = 0;
+
+  const riskColor = (risk, name) => {
+    if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
+    if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
+    if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
+  };
 
   const data = {
     // The array of nodes
-    nodes: [
-      {
-        id: "node1", // String, unique and required
-        label: "0xa2", // The label of the node
-        x: 100,
-        y: 300,
-      },
-      {
-        id: "node2",
-        x: 500,
-        y: 400,
-        label: "0xa1",
-        size: 120,
-      },
-    ],
+    nodes: [],
     // The array of edges
-    edges: [
-      // An edge links from node1 to node2
-      {
-        source: "node1", // String, required, the id of the source node
-        target: "node2", // String, required, the id of the target node
-        label: "Transaction", // The label of the edge
-      },
-    ],
+    edges: [],
   };
 
   useEffect(() => {
@@ -45,33 +34,131 @@ function WalletGraphView(props) {
         new G6.Graph({
           container: ReactDOM.findDOMNode(ref.current),
           width: 1000,
-          height: 400,
+          height: 800,
           defaultNode: {
             shape: "node",
             size: 75,
             labelCfg: {
               style: {
-                fill: "#000000A6",
-                fontSize: 25,
+                fontSize: 10,
               },
             },
             style: {
-              stroke: "#72CC4A",
+              stroke: "#B4B4B4",
               width: 150,
             },
           },
           defaultEdge: {
             shape: "polyline",
+            style: {
+              endArrow: true,
+              lineWidth: 3,
+            },
+          },
+          modes: {
+            default: [
+              {
+                type: "tooltip", // Tooltip
+                formatText(model) {
+                  // The content of tooltip
+                  const text =
+                    "<strong>Transaction ID</strong>: " +
+                    model.data.id +
+                    "<br/> <strong>Risk</strong>: " +
+                    model.data.riskTriggered +
+                    " [" +
+                    model.data.risk +
+                    "]" +
+                    "<br/> <strong>Counter Address</strong>: " +
+                    model.data.counterAddress +
+                    " " +
+                    model.data.counterEntity +
+                    "<br/> <strong>Volume</strong>: " +
+                    model.data.volume +
+                    " " +
+                    model.data.asset +
+                    "<br/> <strong>Customer</strong>: " +
+                    model.data.customer +
+                    "<br/> <strong>Activity Time</strong>: " +
+                    moment
+                      .unix(model.data.activityTime)
+                      .format("YYYY-MM-DD hh:mm:ss");
+                  return text;
+                },
+              },
+            ],
           },
         })
       );
     }
-  }, [data]);
+  }, []);
+
+  if (!_.isEmpty(props.currentAcct)) {
+    console.log("not empty");
+    const yCoordGap = 600 / props.currentAcct.transactions.length;
+    yCoord = yCoordGap;
+    for (const txn of props.currentAcct.transactions) {
+      data.nodes.push({
+        id: txn.id,
+        x: 0,
+        y: yCoord,
+        label: txn.counterAddress + "\n" + txn.volume + " " + txn.asset,
+        data: txn,
+      });
+
+      data.nodes.push({
+        id: "sourceNode", // String, unique and required
+        label:
+          props.currentAcct.id +
+          "\n" +
+          props.currentAcct.currentBalance +
+          " " +
+          props.currentAcct.asset, // The label of the node
+        x: 700,
+        y: 400,
+        size: 120,
+        labelCfg: {
+          style: {
+            fontSize: 15,
+          },
+        },
+      });
+
+      if (txn.direction == "Inbound") {
+        data.edges.push({
+          source: txn.id,
+          target: "sourceNode",
+          label:
+            txn.id +
+            "\n" +
+            moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
+        });
+      } else {
+        data.edges.push({
+          source: "sourceNode",
+          target: txn.id,
+          label:
+            txn.id +
+            "\n" +
+            moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
+        });
+      }
+
+      yCoord += yCoordGap;
+    }
+  }
 
   if (graph) {
     graph.data(data);
     graph.render();
     graph.fitCenter();
+
+    graph.on("node:click", (event) => {
+      console.log("EVENT>>>", event);
+      window.location.replace(
+        "/wallet-details/" + event.item._cfg.model.data.counterAddress
+      );
+    });
   }
 
   return <div ref={ref} style={{ width: "100%", textAlign: "center" }}></div>;
