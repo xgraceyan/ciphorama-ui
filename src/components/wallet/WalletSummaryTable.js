@@ -236,7 +236,6 @@ function WalletSummaryTable(props) {
 
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     currentAcct: state.accounts.currentAcct,
     accounts: state.accounts.accounts,

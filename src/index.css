@@ -185,3 +185,12 @@ a::before {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 15px;
   left: 450px !important;
 }
+
+.wallet-details-tabs .ant-tabs-tab {
+  background-color: #27549c !important;
+  color: rgba(255, 255, 255, 0.598);
+}
+
+.wallet-details-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: white !important;
+}

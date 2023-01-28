@@ -19,7 +19,7 @@ import Sidebar from "../Sidebar";
 import Search from "antd/es/input/Search";
 
 function WalletSummary(props) {
-  const graph_url = "http://localhost:3001/accounts/";
+  const graph_url = "http://localhost:3001/accounts";
   const local_state = React.useState();
   const [state, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -112,7 +112,6 @@ function WalletSummary(props) {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     currentAcct: state.accounts.currentAcct,
     accounts: state.accounts.accounts,

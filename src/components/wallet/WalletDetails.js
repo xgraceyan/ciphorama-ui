@@ -216,6 +216,7 @@ function WalletDetails(props) {
           <Tabs
             onChange={() => {}}
             type="card"
+            className="wallet-details-tabs"
             items={[
               {
                 key: "1",
