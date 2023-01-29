@@ -46,6 +46,7 @@ function WalletGraphView(props) {
             style: {
               stroke: "#B4B4B4",
               width: 150,
+              cursor: "pointer",
             },
           },
           defaultEdge: {
@@ -104,6 +105,7 @@ function WalletGraphView(props) {
         y: yCoord,
         label: txn.counterAddress + "\n" + txn.volume + " " + txn.asset,
         data: txn,
+        cursor: "pointer",
       });
 
       data.nodes.push({
