@@ -274,5 +274,74 @@
         }
       ]
     }
-  ]
+  ],
+  "wallet": {
+    "id": "0x0c46c5be97272dacd58574949cbb8921ce0c5a39",
+    "owner": "",
+    "ownerId": "",
+    "account_type": "",
+    "country": "",
+    "risk": "",
+    "created_at": "2023-01-25T09:51:39.512835Z",
+    "last_screen_time": "0001-01-01T00:00:00Z",
+    "last_activity_time": "0001-01-01T00:00:00Z",
+    "current_balance": 0,
+    "received": 0,
+    "received_transactions": 0,
+    "sent": 0,
+    "sent_transactions": 0,
+    "screened_time": "0001-01-01T00:00:00Z",
+    "asset": "ethereum",
+    "address": "",
+    "risk_triggered": null,
+    "input": "",
+    "output": "",
+    "customer": "",
+    "transactions": [
+      {
+        "id": "0x7494895d380d078d27",
+        "risk": "",
+        "risk_triggered": "",
+        "direction": "Outbound",
+        "counter_address": "0x7494895d380d078d27",
+        "counter_entity": "",
+        "asset": "",
+        "volume": 137449242856264605,
+        "activity_time": "2023-01-25T09:51:44.626185Z"
+      },
+      {
+        "id": "0xe6c69e2c39511946fb",
+        "risk": "",
+        "risk_triggered": "",
+        "direction": "Outbound",
+        "counter_address": "0xe6c69e2c39511946fb",
+        "counter_entity": "",
+        "asset": "",
+        "volume": 82494000000000000,
+        "activity_time": "2023-01-25T09:51:44.626185Z"
+      },
+      {
+        "id": "0x37264353ea2b6862aa",
+        "risk": "",
+        "risk_triggered": "",
+        "direction": "Outbound",
+        "counter_address": "0x37264353ea2b6862aa",
+        "counter_entity": "",
+        "asset": "",
+        "volume": 63020383377139526,
+        "activity_time": "2023-01-25T09:51:44.626185Z"
+      },
+      {
+        "id": "0x0a6c7250375cd282d8",
+        "risk": "",
+        "risk_triggered": "",
+        "direction": "Outbound",
+        "counter_address": "0x0a6c7250375cd282d8",
+        "counter_entity": "",
+        "asset": "",
+        "volume": 102937631225066660,
+        "activity_time": "2023-01-25T09:51:44.626185Z"
+      }
+    ]
+  }
 }

@@ -39,13 +39,13 @@ function WalletDetails(props) {
 
   React.useEffect(() => {
     if (
-      !props.accounts ||
-      props.accounts.length == 0 ||
+      // !props.accounts ||
+      // props.accounts.length == 0 ||
       !props.currentAcct ||
       props.currentAcct.id != account_id
     ) {
-      console.log("WalletDetails fetching account_id :", account_id);
-      props.fetchAccount(account_id, graph_url, props);
+      // console.log("WalletDetails fetching account_id :", account_id);
+      // props.fetchAccount(account_id, graph_url, props);
     }
   }, []);
 

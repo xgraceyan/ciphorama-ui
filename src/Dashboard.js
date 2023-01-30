@@ -38,6 +38,8 @@ const middlewares = [thunk];
 
 //const graph_url = 'http://localhost:9000/query/haijin_eth_test/address_txn_1hop?from_addr=0x0c46c5be97272dacd58574949cbb8921ce0c5a39';
 const graph_url = "http://localhost:3001/accounts/";
+// port-forward planner 10000 to localhost.
+const planner_url = "http://localhost:10000/v1/account_blob";
 const { Content } = Layout;
 
 // https://www.twilio.com/blog/react-choose-functional-components
@@ -48,10 +50,13 @@ function Dashboard(props) {
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const navigate = useNavigate();
 
-  const onSearch = (value) => {
-    console.log("on search nav to ", value);
-    props.fetchAccount(value, graph_url);
-    navigate("/wallet-details/" + value);
+  const onSearch = (wallet_addr) => {
+    //const account_url = graph_url + wallet_addr;
+    const account_url = planner_url + "?id=0x0c46c5be97272dacd58574949cbb8921ce0c5a39";
+    console.log("on search nav to ", wallet_addr, account_url);
+    // props.fetchAccount(wallet_addr, graph_url);
+    props.fetchAccount(wallet_addr, account_url);
+    navigate("/wallet-details/" + wallet_addr);
   };
 
   // React.useEffect(() => {

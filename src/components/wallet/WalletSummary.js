@@ -31,11 +31,11 @@ function WalletSummary(props) {
     navigate("/wallet-details/" + value);
   };
 
-  React.useEffect(() => {
-    if (!props.accounts || props.accounts.length == 0) {
-      props.fetchAccounts(graph_url, props);
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   if (!props.accounts || props.accounts.length == 0) {
+  //     props.fetchAccounts(graph_url, props);
+  //   }
+  // }, []);
 
   const curAcct = props.currentAcct;
   console.log(
@@ -121,7 +121,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAccounts: (graph_url) => dispatch(fetchAccounts(graph_url)),
+    // fetchAccounts: (graph_url) => dispatch(fetchAccounts(graph_url)),
     fetchAccount: (account, graph_url) =>
       dispatch(fetchAccount(account, graph_url)),
   };
