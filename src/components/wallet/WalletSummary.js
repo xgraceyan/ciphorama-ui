@@ -10,7 +10,7 @@ import React from "react";
 import WalletSummaryTable from "./WalletSummaryTable";
 import WalletNavbar from "./WalletNavbar";
 import {
-  fetchAccounts,
+  fetchScreenedWallets,
   fetchAccount,
 } from "../../store/actions/AccountActions";
 import { connect } from "react-redux";
@@ -19,7 +19,6 @@ import Sidebar from "../Sidebar";
 import Search from "antd/es/input/Search";
 
 function WalletSummary(props) {
-  const graph_url = "http://localhost:3001/accounts";
   const local_state = React.useState();
   const [state, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
@@ -27,15 +26,15 @@ function WalletSummary(props) {
 
   const onSearch = (value) => {
     console.log("on search nav to ", value);
-    props.fetchAccount(value, graph_url);
+    props.fetchAccount(value);
     navigate("/wallet-details/" + value);
   };
 
-  // React.useEffect(() => {
-  //   if (!props.accounts || props.accounts.length == 0) {
-  //     props.fetchAccounts(graph_url, props);
-  //   }
-  // }, []);
+  React.useEffect(() => {
+    if (!props.accounts || props.accounts.length == 0) {
+      props.fetchScreenedWallets();
+    }
+  }, []);
 
   const curAcct = props.currentAcct;
   console.log(
@@ -121,9 +120,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // fetchAccounts: (graph_url) => dispatch(fetchAccounts(graph_url)),
-    fetchAccount: (account, graph_url) =>
-      dispatch(fetchAccount(account, graph_url)),
+    fetchScreenedWallets: () => dispatch(fetchScreenedWallets()),
+    fetchAccount: (account) =>
+      dispatch(fetchAccount(account)),
   };
 };
 

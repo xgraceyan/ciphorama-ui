@@ -7,8 +7,9 @@ const screened_wallets_url = "http://localhost:10000/v1/wallets"
 
 export const fetchAccount = (account) => {
   return (dispatch) => {
-    const account = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
-    const account_url = planner_url + "?id=" + account;
+    // const account = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
+    // const account_url = planner_url + "?id=" + account;
+    const account_url = graph_url + account;
     console.log("fetching account url ", account_url);
     fetch(account_url, { method: "GET" })
       .then((response) => response.json())
@@ -16,6 +17,8 @@ export const fetchAccount = (account) => {
         (acct) => {
           if (!_.isEmpty(acct) && !_.isEmpty(acct.blob)) {
             acct = JSON.parse(Buffer.from(acct.blob, 'base64'));
+            dispatch({ type: "ACCOUNT_LOADING_SUCCESS", account: acct });
+          } else if (!_.isEmpty(acct)) {
             dispatch({ type: "ACCOUNT_LOADING_SUCCESS", account: acct });
           } else {
             dispatch({
@@ -34,7 +37,7 @@ export const fetchAccount = (account) => {
 
 export const fetchScreenedWallets = () => {
   return (dispatch) => {
-    fetch(screened_wallets_url, { method: "GET" })
+    fetch(graph_url, { method: "GET" })
       .then((response) => response.json())
       .then(
         (wallets) => {
