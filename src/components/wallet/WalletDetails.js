@@ -22,19 +22,19 @@ import WalletNavbar from "./WalletNavbar";
 import moment from "moment";
 import WalletScanTable from "./WalletScanTable";
 import WalletGraphView from "./WalletGraphView";
+import _ from "underscore";
 
 function WalletDetails(props) {
-  const graph_url = "http://localhost:3001/accounts/";
   let { account_id } = useParams();
   const local_state = React.useState();
   const [state, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const navigate = useNavigate();
 
-  const onSearch = (value) => {
-    console.log("on search nav to ", value);
-    props.fetchAccount(value, graph_url);
-    navigate("/" + value);
+  const onSearch = (wallet) => {
+    console.log("on search nav to ", wallet);
+    props.fetchAccount(wallet);
+    navigate("/" + wallet);
   };
 
   React.useEffect(() => {
@@ -44,19 +44,18 @@ function WalletDetails(props) {
       !props.currentAcct ||
       props.currentAcct.id != account_id
     ) {
-      // console.log("WalletDetails fetching account_id :", account_id);
-      // props.fetchAccount(account_id, graph_url, props);
+      console.log("WalletDetails fetching account_id :", account_id);
+      props.fetchAccount(account_id);
     }
   }, []);
 
   const curAcct = props.currentAcct;
   console.log(
-    "loading WalletDetails account_id",
+    "Rendering WalletDetails account_id",
     account_id,
     " props ",
     props,
-    " current account ",
-    curAcct
+    " current account "
   );
 
   const copyAddress = () => {
@@ -186,20 +185,14 @@ function WalletDetails(props) {
                     {
                       key: "2",
                       1: "Wallet Creation Time:",
-                      2: moment
-                        .unix(props.currentAcct.createdAt)
-                        .format("YYYY-MM-DD hh:mm:ss"),
+                      2: props.currentAcct.createdAt, //moment.unix(props.currentAcct.createdAt).format("YYYY-MM-DD hh:mm:ss"),
                       3: "Last Activity Time:",
-                      4: moment
-                        .unix(props.currentAcct.lastActivityTime)
-                        .format("YYYY-MM-DD hh:mm:ss"),
+                      4: props.currentAcct.lastActivityTime,
                     },
                     {
                       key: "3",
                       1: "Last Screened Time: ",
-                      2: moment
-                        .unix(props.currentAcct.lastScreenedTime)
-                        .format("YYYY-MM-DD hh:mm:ss"),
+                      2: props.currentAcct.lastScreenedTime,
                       3: "Last Screened By: ",
                       4: props.currentAcct.lastScreenedBy,
                     },

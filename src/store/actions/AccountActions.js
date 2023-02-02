@@ -1,26 +1,21 @@
 import _ from "underscore";
 import { Buffer } from "buffer";
 
-export const fetchAccount = (account, account_url, props) => {
+const graph_url = "http://localhost:3001/accounts/";
+const planner_url = "http://localhost:10000/v1/accounts";
+const screened_wallets_url = "http://localhost:10000/v1/wallets"
+
+export const fetchAccount = (account) => {
   return (dispatch) => {
+    const account = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
+    const account_url = planner_url + "?id=" + account;
     console.log("fetching account url ", account_url);
     fetch(account_url, { method: "GET" })
       .then((response) => response.json())
       .then(
         (acct) => {
-          console.log(
-            "fetching single account request:",
-            account_url,
-            " acct: ",
-            acct,
-            " props:",
-            props
-          );
-          if (!_.isEmpty(acct)) {
-            if (!_.isEmpty(acct.blob)) {
-              acct = JSON.parse(Buffer.from(acct.blob, 'base64'));
-              console.log("decoding blob to ", acct);
-            }
+          if (!_.isEmpty(acct) && !_.isEmpty(acct.blob)) {
+            acct = JSON.parse(Buffer.from(acct.blob, 'base64'));
             dispatch({ type: "ACCOUNT_LOADING_SUCCESS", account: acct });
           } else {
             dispatch({
@@ -37,23 +32,14 @@ export const fetchAccount = (account, account_url, props) => {
   };
 };
 
-export const fetchAccounts = (graph_url, props) => {
-  const accounts_url = graph_url + "/";
+export const fetchScreenedWallets = () => {
   return (dispatch) => {
-    fetch(accounts_url, { method: "GET" })
+    fetch(screened_wallets_url, { method: "GET" })
       .then((response) => response.json())
       .then(
-        (accounts) => {
-          console.log(
-            "fetching all accounts: ",
-            accounts_url,
-            " accounts: ",
-            accounts,
-            " props:",
-            props
-          );
-          if (!_.isEmpty(accounts)) {
-            dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", accounts: accounts });
+        (wallets) => {
+          if (!_.isEmpty(wallets)) {
+            dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", accounts: wallets });
           } else {
             dispatch({
               type: "ACCOUNT_LOADING_FAILURE",

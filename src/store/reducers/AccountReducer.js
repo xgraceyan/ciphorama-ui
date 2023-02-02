@@ -1,5 +1,6 @@
 import _ from "underscore";
 
+// this reducer responsibel for accounts ary and currentAcct;
 const initState = {
   accounts: [],
 };

@@ -1,27 +1,15 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Layout,
-  Menu,
-  theme,
-  Input,
-  Row,
-  Col,
-  Divider,
-  Space,
-  Button,
-  Card,
-  Tabs,
-} from "antd";
+import { Layout, Menu, theme, Input, Row, Col, Divider, Space, Button, Card, Tabs } from "antd";
+import _ from "underscore";
 
 var jsonQuery = require("json-query");
 
-var _ = require("underscore");
-
+// Deprecated !!! use WalletDetails
 function AccountDetails({ props }) {
   console.log("AccountDetails props:", props);
-  const account = props; //props.currentAcct;
+  const account = props;  //props.currentAcct;
   if (!_.isEmpty(account)) {
     return (
       <section className="stats-section">

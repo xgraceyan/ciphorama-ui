@@ -46,7 +46,6 @@ function WalletGraphView(props) {
             style: {
               stroke: "#B4B4B4",
               width: 150,
-              cursor: "pointer",
             },
           },
           defaultEdge: {
@@ -81,9 +80,8 @@ function WalletGraphView(props) {
                     "<br/> <strong>Customer</strong>: " +
                     model.data.customer +
                     "<br/> <strong>Activity Time</strong>: " +
-                    moment
-                      .unix(model.data.activityTime)
-                      .format("YYYY-MM-DD hh:mm:ss");
+                    model.data.activityTime;
+                    // moment.unix(model.data.activityTime).format("YYYY-MM-DD hh:mm:ss");
                   return text;
                 },
               },
@@ -105,7 +103,6 @@ function WalletGraphView(props) {
         y: yCoord,
         label: txn.counterAddress + "\n" + txn.volume + " " + txn.asset,
         data: txn,
-        cursor: "pointer",
       });
 
       data.nodes.push({
@@ -133,7 +130,8 @@ function WalletGraphView(props) {
           label:
             txn.id +
             "\n" +
-            moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
+            txn.activityTime,
+            // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
         });
       } else {
         data.edges.push({
@@ -142,7 +140,8 @@ function WalletGraphView(props) {
           label:
             txn.id +
             "\n" +
-            moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
+            txn.activityTime,
+            // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
         });
       }
 
@@ -156,7 +155,6 @@ function WalletGraphView(props) {
     graph.fitCenter();
 
     graph.on("node:click", (event) => {
-      console.log("EVENT>>>", event);
       window.location.replace(
         "/wallet-details/" + event.item._cfg.model.data.counterAddress
       );

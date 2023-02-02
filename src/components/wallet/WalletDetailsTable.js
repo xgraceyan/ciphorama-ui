@@ -113,7 +113,8 @@ function WalletDetailsTable(props) {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    render: (text) => moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
+    render: (text) => text, // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
+
   });
 
   const columns = [
