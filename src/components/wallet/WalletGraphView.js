@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import _ from "underscore";
 import moment from "moment";
+import { riskBadgeColor, riskScoreColor, riskTriggeredColor } from "./Utils";
 var ReactDOM = require("react-dom");
 
 function WalletGraphView(props) {
@@ -14,11 +15,11 @@ function WalletGraphView(props) {
   const [graph, setGraph] = useState(null);
   var yCoord = 0;
 
-  const riskColor = (risk, name) => {
-    if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
-    if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
-    if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
-  };
+  // const riskColor = (risk, name) => {
+  //   if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
+  //   if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
+  //   if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
+  // };
 
   const data = {
     // The array of nodes
@@ -76,7 +77,7 @@ function WalletGraphView(props) {
                     "<br/> <strong>Volume</strong>: " +
                     model.data.volume +
                     " " +
-                    model.data.asset +
+                    model.data.assetType +
                     "<br/> <strong>Customer</strong>: " +
                     model.data.customer +
                     "<br/> <strong>Activity Time</strong>: " +
@@ -92,27 +93,26 @@ function WalletGraphView(props) {
     }
   }, []);
 
-  if (!_.isEmpty(props.currentAcct)) {
-    console.log("not empty");
-    const yCoordGap = 600 / props.currentAcct.transactions.length;
+  if (!_.isEmpty(props.currentWallet)) {
+    const yCoordGap = 600 / props.currentWallet.transactions.length;
     yCoord = yCoordGap;
-    for (const txn of props.currentAcct.transactions) {
+    for (const txn of props.currentWallet.transactions) {
       data.nodes.push({
         id: txn.id,
         x: 0,
         y: yCoord,
-        label: txn.counterAddress + "\n" + txn.volume + " " + txn.asset,
+        label: txn.counterAddress + "\n" + txn.volume + " " + txn.assetType,
         data: txn,
       });
 
       data.nodes.push({
         id: "sourceNode", // String, unique and required
         label:
-          props.currentAcct.id +
+          props.currentWallet.id +
           "\n" +
-          props.currentAcct.currentBalance +
+          props.currentWallet.currentBalance +
           " " +
-          props.currentAcct.asset, // The label of the node
+          props.currentWallet.assetType, // The label of the node
         x: 700,
         y: 400,
         size: 120,
@@ -166,8 +166,8 @@ function WalletGraphView(props) {
 
 const mapStateToProps = (state) => {
   return {
-    currentAcct: state.accounts.currentAcct,
-    accounts: state.accounts.accounts,
+    currentWallet: state.wallets.currentWallet,
+    wallets: state.wallets.wallets,
     transactions: state.transactions.transactions,
   };
 };

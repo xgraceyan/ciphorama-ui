@@ -28,7 +28,7 @@ import AccountDetails from "./components/AccountDetails";
 import Sidebar from "./components/Sidebar";
 import Search from "antd/es/input/Search";
 import thunk from "redux-thunk";
-import { fetchAccount } from "./store/actions/AccountActions";
+import { fetchWallet } from "./store/actions/AccountActions";
 import { Header } from "antd/es/layout/layout";
 import Navbar from "./components/Navbar";
 
@@ -47,30 +47,10 @@ function Dashboard(props) {
 
   const onSearch = (wallet_addr) => {
     console.log("on search nav to ", wallet_addr);
-    props.fetchAccount(wallet_addr);
+    props.fetchWallet(wallet_addr);
     navigate("/wallet-details/" + wallet_addr);
   };
 
-  // React.useEffect(() => {
-  //   console.log("Dashboard Mounted with props: ", props);
-  //   if (
-  //     !props.accounts ||
-  //     props.accounts.length == 0 ||
-  //     !props.accounts[0].id == account_id
-  //   ) {
-  //     props.fetchAccount(account_id, graph_url, props);
-  //   }
-  // }, []);
-
-  // const curAcct = props.currentAcct;
-  // console.log(
-  //   "loading dashboard account_id",
-  //   account_id,
-  //   " props ",
-  //   props,
-  //   " current account ",
-  //   curAcct
-  // );
   return (
     <Layout>
       <Layout>
@@ -106,16 +86,16 @@ function Dashboard(props) {
 
 const mapStateToProps = (state) => {
   return {
-    currentAcct: state.accounts.currentAcct,
-    accounts: state.accounts.accounts,
+    currentWallet: state.wallets.currentWallet,
+    wallets: state.wallets.wallets,
     transactions: state.transactions.transactions,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAccount: (account, graph_url) =>
-      dispatch(fetchAccount(account, graph_url)),
+    fetchWallet: (wallet) =>
+      dispatch(fetchWallet(wallet)),
   };
 };
 

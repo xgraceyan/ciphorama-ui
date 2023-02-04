@@ -2,25 +2,11 @@ import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { fetchAccount } from "../../store/actions/AccountActions";
+import { riskScoreColor, riskTriggeredColor } from "./Utils";
 import moment from "moment";
 import _ from "underscore";
 
 function WalletDetailsTable(props) {
-  const riskColor = (risk, name) => {
-    if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
-    if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
-    if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
-  };
-
-  const riskTriggeredColor = (text) => {
-    var riskArr = [];
-    text.forEach((risk) => {
-      riskArr.push(riskColor(risk.risk, risk.name));
-    });
-    return riskArr;
-  };
-
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -149,9 +135,9 @@ function WalletDetailsTable(props) {
       key: "direction",
     },
     {
-      title: "Asset",
-      dataIndex: "asset",
-      key: "asset",
+      title: "AssetType",
+      dataIndex: "assetType",
+      key: "assetType",
     },
     {
       title: "Volume (USD)",
@@ -174,20 +160,20 @@ function WalletDetailsTable(props) {
     },
   ];
 
-  console.log("loading WalletDetailsTable props ", props);
+  console.log("rendering WalletDetailsTable props ", props);
   const data = [];
-  if (!_.isEmpty(props.currentAcct)) {
-    for (const txn of props.currentAcct.transactions) {
+  if (!_.isEmpty(props.currentWallet)) {
+    for (const txn of props.currentWallet.transactions) {
       console.log("WalletDetails txn", txn);
       data.push({
         key: txn.id,
         transactionId: txn.id,
-        risk: riskColor(txn.risk, txn.risk),
-        riskTriggered: riskColor(txn.risk, txn.riskTriggered),
+        risk: riskScoreColor(txn.riskScoreColor),
+        riskTriggered: riskTriggeredColor(txn.riskTriggered),
         direction: txn.direction,
         counterAddress: txn.counterAddress,
         counterEntity: txn.counterEntity,
-        asset: txn.asset,
+        asset: txn.assetType,
         volume: txn.volume,
         customer: txn.customer,
         date: txn.activityTime,
@@ -208,8 +194,8 @@ function WalletDetailsTable(props) {
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
   return {
-    currentAcct: state.accounts.currentAcct,
-    accounts: state.accounts.accounts,
+    currentWallet: state.wallets.currentWallet,
+    wallets: state.wallets.wallets,
     transactions: state.transactions.transactions,
   };
 };

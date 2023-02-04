@@ -1,41 +1,40 @@
 import _ from "underscore";
 
-// this reducer responsibel for accounts ary and currentAcct;
+// this reducer responsibel for accounts ary and currentWallet;
 const initState = {
-  accounts: [],
+  wallets: [],
 };
 
 // https://stackoverflow.com/questions/39513753/my-redux-state-has-changed-why-doesnt-react-trigger-a-re-render
 const AccountReducer = (state = initState, action) => {
-  let accounts = state.accounts;
-  console.log("AccountReducer: accounts : ", accounts);
+  let wallets = state.wallets;
   switch (action.type) {
     case "ACCOUNT_LOADING_SUCCESS":
-      let curAcct = action.account;
-      if (!_.isEmpty(curAcct)) {
-        accounts.push(curAcct);
+      let curWallet = action.wallet;
+      if (!_.isEmpty(curWallet)) {
+        wallets.push(curWallet);
       }
-      accounts = _.uniq(accounts, false, e => e.id);
-      console.log("single account load success", curAcct, " new accounts ", accounts);
+      wallets = _.uniq(wallets);
+      console.log("single wallet load success", curWallet, " new wallets ", wallets);
       return {
         ...state,
-        currentAcct: curAcct,
-        accounts: accounts
+        currentWallet: curWallet,
+        wallets: wallets
       };
-    case "ALL_ACCOUNT_LOADING_SUCCESS":
-      accounts = action.accounts;
-      accounts = _.uniq(accounts, false, e => e.id);
-      console.log("all account load success", action.accounts, " new accounts ", accounts);
+    case "ALL_ACCOUNT_LOADING_SUCCESS": 
+      wallets = action.wallets;
+      wallets = _.uniq(action.wallets, false, e => e.address);
+      console.log("all wallets load success", action.wallets, " filterd wallets ", wallets);
       return {
         ...state,
-        currentAcct: {},
-        accounts: accounts
+        currentWallet: {},
+        wallets: wallets
       };
     case "ACCOUNT_LOADING_FAILURE":
-      console.log("account load failure", action.error);
+      console.log("wallet load failure", action.error);
       return {
         ...state,
-        currentAcct: {},
+        currentWallet: {},
       };
     default:
       return {

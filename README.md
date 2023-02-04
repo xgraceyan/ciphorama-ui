@@ -36,3 +36,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 sudo npm install -g json-server
 json-server --watch mock-graph.json -p 3001
 ```
+### Baackend Integration
+
+use `k9s`, find the pod in namespace ciphorama-planner, shift-f to port forward 10000 to local.
+
+`curl -X GET 'http://localhost:10000/v1/wallets?id=0x04786aada9deea2150deab7b3b8911c309f5ed90&graphName=eth_test'`

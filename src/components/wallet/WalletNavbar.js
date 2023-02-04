@@ -3,8 +3,19 @@ import { Header } from "antd/es/layout/layout";
 import Search from "antd/es/transfer/search";
 import { SettingFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
+import { connect } from "react-redux";
+import { fetchWallet } from "../../store/actions/AccountActions";
 
-const WalletNavbar = () => {
+function WalletNavbar(props) {
+  const navigate = useNavigate();
+
+  const onSearch = (wallet) => {
+    console.log("WalletNavbar :: onSearch ", wallet);
+    props.fetchWallet(wallet);
+    navigate("/" + wallet);
+  };
+
   return (
     <Header className="header nav-header">
       <div
@@ -28,10 +39,8 @@ const WalletNavbar = () => {
             <Search
               placeholder="Search for addresses, transactions, cases, and customers..."
               allowClear
-              onSearch={() => {}}
-              style={{
-                width: 200,
-              }}
+              onSearch={onSearch}
+              style={{ width: 200,}}
             />
           </div>
           <div>
@@ -73,4 +82,11 @@ const WalletNavbar = () => {
   );
 };
 
-export default WalletNavbar;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchWallet: (wallet) =>
+      dispatch(fetchWallet(wallet)),
+  };
+};
+
+export default connect(mapDispatchToProps)(WalletNavbar);

@@ -11,11 +11,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Dashboard />} />
-        <Route exact path="/:account_id" element={<Dashboard />} />
+        <Route exact path="/:wallet_addr" element={<Dashboard />} />
         <Route exact path="/wallet-summary" element={<WalletSummary />} />
         <Route
           exact
-          path="/wallet-details/:account_id"
+          path="/wallet-details/:wallet_addr"
           element={<WalletDetails />}
         />
       </Routes>

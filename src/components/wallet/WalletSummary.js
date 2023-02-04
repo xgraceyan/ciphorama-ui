@@ -11,7 +11,7 @@ import WalletSummaryTable from "./WalletSummaryTable";
 import WalletNavbar from "./WalletNavbar";
 import {
   fetchScreenedWallets,
-  fetchAccount,
+  fetchWallet,
 } from "../../store/actions/AccountActions";
 import { connect } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
@@ -24,32 +24,20 @@ function WalletSummary(props) {
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const navigate = useNavigate();
 
-  const onSearch = (value) => {
-    console.log("on search nav to ", value);
-    props.fetchAccount(value);
-    navigate("/wallet-details/" + value);
-  };
-
   React.useEffect(() => {
-    if (!props.accounts || props.accounts.length == 0) {
+    console.log(" fetching screened wallets ", props);
+    if (!props.wallets || props.wallets.length == 0) {
       props.fetchScreenedWallets();
     }
   }, []);
 
-  const curAcct = props.currentAcct;
-  console.log(
-    "loading dashboard account_id",
-    " props ",
-    props,
-    " current account ",
-    curAcct
-  );
+  console.log("Rending WalletSummary props ", props);
   return (
     <Layout>
       <Content>
         <WalletNavbar />
         <div style={{ padding: "2rem 3rem", minHeight: "calc(100vh - 64px)" }}>
-          <section className="search-section">
+          {/* <section className="search-section">
             <p style={{ fontSize: "1rem" }}>Search wallet address</p>
             <Search
               placeholder="Lookup address"
@@ -57,7 +45,7 @@ function WalletSummary(props) {
               enterButton
               style={{ width: "75%" }}
             />
-          </section>
+          </section> */}
           <Divider />
           <Row justify="space-around" align="middle">
             <Col span={12} align="left" className="wallet-summary-title">
@@ -112,8 +100,8 @@ function WalletSummary(props) {
 
 const mapStateToProps = (state) => {
   return {
-    currentAcct: state.accounts.currentAcct,
-    accounts: state.accounts.accounts,
+    currentWallet: state.wallets.currentWallet,
+    wallets: state.wallets.wallets,
     transactions: state.transactions.transactions,
   };
 };
@@ -121,8 +109,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchScreenedWallets: () => dispatch(fetchScreenedWallets()),
-    fetchAccount: (account) =>
-      dispatch(fetchAccount(account)),
+    fetchWallet: (wallet) =>
+      dispatch(fetchWallet(wallet)),
   };
 };
 

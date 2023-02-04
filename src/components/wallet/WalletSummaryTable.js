@@ -1,32 +1,17 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
+import { Table, Tag, Space, Inflow, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { fetchAccount } from "../../store/actions/AccountActions";
+import { riskScoreColor, riskTriggeredColor } from "./Utils";
 import moment from "moment";
 import _ from "underscore";
 
 function WalletSummaryTable(props) {
   const navigate = useNavigate();
-
-  const riskColor = (risk, name) => {
-    if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
-    if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
-    if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
-  };
-
-  const riskTriggeredColor = (text) => {
-    var riskArr = [];
-    text.forEach((risk) => {
-      riskArr.push(riskColor(risk.risk, risk.name));
-    });
-    return riskArr;
-  };
-
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const searchInput = useRef(null);
+  const searchInflow = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -113,10 +98,10 @@ function WalletSummaryTable(props) {
         : "",
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
+        setTimeout(() => searchInflow.current?.select(), 100);
       }
     },
-    render: (text) => moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
+    render: (text) => text, // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
   });
 
   const columns = [
@@ -147,7 +132,7 @@ function WalletSummaryTable(props) {
       dataIndex: "address",
       key: "address",
       render: (text, record) => (
-        <Link to={"/wallet-details/" + record.key}>{text}</Link>
+        <Link to={"/wallet-details/" + record.address}>{text}</Link>
       ),
     },
     {
@@ -156,9 +141,9 @@ function WalletSummaryTable(props) {
       key: "riskTriggered",
     },
     {
-      title: "Asset",
-      dataIndex: "asset",
-      key: "asset",
+      title: "AssetType",
+      dataIndex: "assetType",
+      key: "assetType",
       filters: [
         {
           text: "ETH",
@@ -178,18 +163,18 @@ function WalletSummaryTable(props) {
       onFilter: (value, record) => record.asset.startsWith(value),
     },
     {
-      title: "Input (USD)",
-      dataIndex: "input",
-      key: "input",
+      title: "Inflow (USD)",
+      dataIndex: "inflow",
+      key: "inflow",
       render: (text) => text + " USD",
-      sorter: (a, b) => a.input - b.input,
+      sorter: (a, b) => a.inflow - b.inflow,
     },
     {
-      title: "Output (USD)",
-      dataIndex: "output",
-      key: "output",
+      title: "Outflow (USD)",
+      dataIndex: "outflow",
+      key: "outflow",
       render: (text) => text + " USD",
-      sorter: (a, b) => a.output - b.output,
+      sorter: (a, b) => a.outflow - b.outflow,
     },
     {
       title: "Customer",
@@ -205,21 +190,21 @@ function WalletSummaryTable(props) {
     },
   ];
 
-  console.log("loading account table, props ", props);
+  console.log("loading WalletSummaryTable, props ", props);
   const data = [];
-  if (!_.isEmpty(props.accounts)) {
-    for (const acct of props.accounts) {
+  if (!_.isEmpty(props.wallets)) {
+    for (const wallet of props.wallets) {
       data.push({
-        key: acct.id,
-        transactionId: acct.id,
-        risk: riskColor(acct.risk, acct.risk),
-        address: acct.address,
-        riskTriggered: riskTriggeredColor(acct.riskTriggered),
-        asset: acct.asset,
-        input: acct.input,
-        output: acct.output,
-        customer: acct.customer,
-        date: acct.screenedTime,
+        key: wallet.id,
+        transactionId: wallet.id,
+        risk: riskScoreColor(wallet.riskScore),
+        address: wallet.address,
+        riskTriggered: riskTriggeredColor(wallet.riskTriggered),
+        assetType: wallet.assetType,
+        inflow: wallet.inflow,
+        outflow: wallet.outflow,
+        customer: wallet.customer,
+        date: wallet.screenTime,
       });
     }
   }
@@ -237,8 +222,8 @@ function WalletSummaryTable(props) {
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
   return {
-    currentAcct: state.accounts.currentAcct,
-    accounts: state.accounts.accounts,
+    currentWallet: state.wallets.currentWallet,
+    wallets: state.wallets.wallets,
     transactions: state.transactions.transactions,
   };
 };

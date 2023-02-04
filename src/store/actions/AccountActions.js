@@ -2,28 +2,28 @@ import _ from "underscore";
 import { Buffer } from "buffer";
 
 const graph_url = "http://localhost:3001/accounts/";
-const planner_url = "http://localhost:10000/v1/accounts";
-const screened_wallets_url = "http://localhost:10000/v1/wallets"
+const planner_url = "http://localhost:10000/v1/wallets";
+const screened_wallets_url = "http://localhost:10000/v1/wallet-screen"
 
-export const fetchAccount = (account) => {
+export const fetchWallet = (wallet) => {
   return (dispatch) => {
-    // const account = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
-    // const account_url = planner_url + "?id=" + account;
-    const account_url = graph_url + account;
-    console.log("fetching account url ", account_url);
+    // const account_url = graph_url + account;
+    const wallet = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
+    const account_url = planner_url + "?id=" + wallet;
+    console.log("fetching wallet url ", account_url);
     fetch(account_url, { method: "GET" })
       .then((response) => response.json())
       .then(
-        (acct) => {
-          if (!_.isEmpty(acct) && !_.isEmpty(acct.blob)) {
-            acct = JSON.parse(Buffer.from(acct.blob, 'base64'));
-            dispatch({ type: "ACCOUNT_LOADING_SUCCESS", account: acct });
-          } else if (!_.isEmpty(acct)) {
-            dispatch({ type: "ACCOUNT_LOADING_SUCCESS", account: acct });
+        (wallet) => {
+          if (!_.isEmpty(wallet) && !_.isEmpty(wallet.blob)) {
+            wallet = JSON.parse(Buffer.from(wallet.blob, 'base64'));
+            dispatch({ type: "ACCOUNT_LOADING_SUCCESS", wallet: wallet });
+          } else if (!_.isEmpty(wallet)) {
+            dispatch({ type: "ACCOUNT_LOADING_SUCCESS", wallet: wallet });
           } else {
             dispatch({
               type: "ACCOUNT_LOADING_FAILURE",
-              error: "empty account",
+              error: "empty wallet",
             });
           }
         },
@@ -37,16 +37,22 @@ export const fetchAccount = (account) => {
 
 export const fetchScreenedWallets = () => {
   return (dispatch) => {
-    fetch(graph_url, { method: "GET" })
+    const screen_url = screened_wallets_url;  // graph_url
+    console.log("fecthing screen wallets ", screen_url);
+    fetch(screen_url, { method: "GET" })
       .then((response) => response.json())
       .then(
         (wallets) => {
-          if (!_.isEmpty(wallets)) {
-            dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", accounts: wallets });
+          if (!_.isEmpty(wallets) && !_.isEmpty(wallets.blob)) {
+            wallets = JSON.parse(Buffer.from(wallets.blob, 'base64'));
+            console.log("screen wallet loading ", wallets.wallets);
+            dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", wallets: wallets.wallets });
+          } else if (!_.isEmpty(wallets)) {
+            dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", wallets: wallets });
           } else {
             dispatch({
               type: "ACCOUNT_LOADING_FAILURE",
-              error: "empty accounts",
+              error: "empty wallets",
             });
           }
         },

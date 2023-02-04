@@ -1,3 +1,4 @@
+import _ from "underscore";
 import {
   Badge,
   Button,
@@ -15,61 +16,42 @@ import { CopyOutlined } from "@ant-design/icons";
 import React from "react";
 import { connect } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { fetchAccount } from "../../store/actions/AccountActions";
+import { fetchWallet } from "../../store/actions/AccountActions";
 import Sidebar from "../Sidebar";
 import WalletDetailsTable from "./WalletDetailsTable";
 import WalletNavbar from "./WalletNavbar";
 import moment from "moment";
 import WalletScanTable from "./WalletScanTable";
 import WalletGraphView from "./WalletGraphView";
-import _ from "underscore";
+import { riskBadgeColor, riskScoreColor, riskTriggeredColor } from "./Utils";
 
 function WalletDetails(props) {
-  let { account_id } = useParams();
+  let { wallet_addr } = useParams();
   const local_state = React.useState();
   const [state, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const navigate = useNavigate();
 
-  const onSearch = (wallet) => {
-    console.log("on search nav to ", wallet);
-    props.fetchAccount(wallet);
-    navigate("/" + wallet);
-  };
-
   React.useEffect(() => {
-    if (!props.currentAcct || props.currentAcct.id != account_id) {
-      console.log("WalletDetails fetching account_id :", account_id);
-      props.fetchAccount(account_id);
+    if (_.isEmpty(props.currentWallet) || 
+        props.currentWallet.id != wallet_addr) {
+      console.log("WalletDetails fetching wallet_addr :", wallet_addr);
+      props.fetchWallet(wallet_addr);
     }
   }, []);
 
-  const curAcct = props.currentAcct;
-  console.log(
-    "Rendering WalletDetails account_id",
-    account_id,
-    " props ",
-    props,
-    " current account "
-  );
+  console.log("Rendering WalletDetails wallet ", wallet_addr, " props ", props);
 
   const copyAddress = () => {
-    navigator.clipboard.writeText(props.currentAcct.id);
-  };
-
-  const riskBadgeColor = (risk) => {
-    if (risk == "High") return "red";
-    if (risk == "Medium") return "gold";
-    if (risk == "Low") return "green";
+    navigator.clipboard.writeText(props.currentWallet.id);
   };
 
   return (
     <Layout>
       <Content>
         <WalletNavbar />
-
         <div style={{ padding: "2rem 3rem", minHeight: "calc(100vh - 64px)" }}>
-          {props.currentAcct != null ? (
+          {props.currentWallet != null ? (
             <Row align="middle" justify="space-between" gutter={32}>
               <Col
                 span={24}
@@ -80,7 +62,7 @@ function WalletDetails(props) {
                 }}
               >
                 <h1 style={{ fontSize: "1.8rem" }}>
-                  <span>Wallet Address: {props.currentAcct.id}</span>
+                  <span>Wallet Address: {props.currentWallet.id}</span>
                   &nbsp;
                   <span>
                     <Tooltip
@@ -104,10 +86,10 @@ function WalletDetails(props) {
                 <h2>
                   Risk Indicator: &nbsp; &nbsp;
                   <Tag
-                    color={riskBadgeColor(props.currentAcct.risk)}
+                    color={riskBadgeColor(props.currentWallet.risk)}
                     style={{ transform: "scale(1.4)" }}
                   >
-                    {props.currentAcct.risk}
+                    {props.currentWallet.risk}
                   </Tag>
                 </h2>
               </Col>
@@ -133,20 +115,20 @@ function WalletDetails(props) {
                     {
                       key: "1",
                       name: "Balance:",
-                      eth: props.currentAcct.currentBalance,
-                      usd: 26156652.03,
+                      eth: props.currentWallet.currentBalance,
+                      usd: 1500*props.currentWallet.currentBalance,
                     },
                     {
                       key: "2",
                       name: "Total Received:",
-                      eth: props.currentAcct.received,
-                      usd: 2348327.39,
+                      eth: props.currentWallet.received,
+                      usd: 1500*props.currentWallet.received,
                     },
                     {
                       key: "3",
                       name: "Total Spent: ",
-                      eth: props.currentAcct.sent,
-                      usd: 2344.594,
+                      eth: props.currentWallet.sent,
+                      usd: 1500*props.currentWallet.sent,
                     },
                   ]}
                   size="middle"
@@ -175,21 +157,21 @@ function WalletDetails(props) {
                     {
                       key: "1",
                       1: "Customer:",
-                      2: props.currentAcct.customer,
+                      2: props.currentWallet.customer,
                     },
                     {
                       key: "2",
                       1: "Wallet Creation Time:",
-                      2: props.currentAcct.createdAt, //moment.unix(props.currentAcct.createdAt).format("YYYY-MM-DD hh:mm:ss"),
+                      2: props.currentWallet.createdAt, //moment.unix(props.currentWallet.createdAt).format("YYYY-MM-DD hh:mm:ss"),
                       3: "Last Activity Time:",
-                      4: props.currentAcct.lastActivityTime,
+                      4: props.currentWallet.lastActivityTime,
                     },
                     {
                       key: "3",
                       1: "Last Screened Time: ",
-                      2: props.currentAcct.lastScreenedTime,
+                      2: props.currentWallet.lastScreenedTime,
                       3: "Last Screened By: ",
-                      4: props.currentAcct.lastScreenedBy,
+                      4: props.currentWallet.lastScreenedBy,
                     },
                   ]}
                   size="middle"
@@ -236,18 +218,17 @@ function WalletDetails(props) {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
-    currentAcct: state.accounts.currentAcct,
-    accounts: state.accounts.accounts,
+    currentWallet: state.wallets.currentWallet,
+    wallets: state.wallets.wallets,
     transactions: state.transactions.transactions,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAccount: (account, graph_url) =>
-      dispatch(fetchAccount(account, graph_url)),
+    fetchWallet: (wallet) =>
+      dispatch(fetchWallet(wallet)),
   };
 };
 
