@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { riskScoreColor, riskTriggeredColor } from "./Utils";
+import { riskColor, riskTriggeredColor } from "./Utils";
 import moment from "moment";
 import _ from "underscore";
 
@@ -100,7 +100,6 @@ function WalletDetailsTable(props) {
       }
     },
     render: (text) => text, // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
-
   });
 
   const columns = [
@@ -128,11 +127,6 @@ function WalletDetailsTable(props) {
       title: "Counterparty Entity",
       dataIndex: "counterEntity",
       key: "counterEntity",
-    },
-    {
-      title: "Direction",
-      dataIndex: "direction",
-      key: "direction",
     },
     {
       title: "AssetType",
@@ -168,8 +162,8 @@ function WalletDetailsTable(props) {
       data.push({
         key: txn.id,
         transactionId: txn.id,
-        risk: riskScoreColor(txn.riskScoreColor),
-        riskTriggered: riskTriggeredColor(txn.riskTriggered),
+        risk: riskColor(txn.risk, txn.risk),
+        riskTriggered: riskColor(txn.risk, txn.riskTriggered),
         direction: txn.direction,
         counterAddress: txn.counterAddress,
         counterEntity: txn.counterEntity,

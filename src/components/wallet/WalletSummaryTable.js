@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Table, Tag, Space, Inflow, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { riskScoreColor, riskTriggeredColor } from "./Utils";
+import { riskColor, riskScoreCalc, riskTriggeredColor } from "./Utils";
 import moment from "moment";
 import _ from "underscore";
 
@@ -132,7 +132,7 @@ function WalletSummaryTable(props) {
       dataIndex: "address",
       key: "address",
       render: (text, record) => (
-        <Link to={"/wallet-details/" + record.address}>{text}</Link>
+        <Link to={"/wallet-details/" + record.id}>{text}</Link>
       ),
     },
     {
@@ -197,7 +197,10 @@ function WalletSummaryTable(props) {
       data.push({
         key: wallet.id,
         transactionId: wallet.id,
-        risk: riskScoreColor(wallet.riskScore),
+        risk: riskColor(
+          riskScoreCalc(wallet.riskScore),
+          riskScoreCalc(wallet.riskScore)
+        ),
         address: wallet.address,
         riskTriggered: riskTriggeredColor(wallet.riskTriggered),
         assetType: wallet.assetType,

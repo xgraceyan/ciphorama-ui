@@ -26,9 +26,7 @@ function WalletSummary(props) {
 
   React.useEffect(() => {
     console.log(" fetching screened wallets ", props);
-    if (!props.wallets || props.wallets.length == 0) {
-      props.fetchScreenedWallets();
-    }
+    props.fetchScreenedWallets();
   }, []);
 
   console.log("Rending WalletSummary props ", props);
@@ -109,8 +107,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchScreenedWallets: () => dispatch(fetchScreenedWallets()),
-    fetchWallet: (wallet) =>
-      dispatch(fetchWallet(wallet)),
+    fetchWallet: (wallet) => dispatch(fetchWallet(wallet)),
   };
 };
 

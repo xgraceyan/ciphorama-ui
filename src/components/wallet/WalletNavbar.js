@@ -1,19 +1,20 @@
 import { Avatar, Layout, Menu, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
-import Search from "antd/es/transfer/search";
+
 import { SettingFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router";
 import { connect } from "react-redux";
 import { fetchWallet } from "../../store/actions/AccountActions";
+import Search from "antd/es/input/Search";
 
 function WalletNavbar(props) {
   const navigate = useNavigate();
 
   const onSearch = (wallet) => {
     console.log("WalletNavbar :: onSearch ", wallet);
-    props.fetchWallet(wallet);
-    navigate("/" + wallet);
+    // props.fetchWallet(wallet);
+    navigate("/wallet-details/" + wallet);
   };
 
   return (
@@ -34,15 +35,14 @@ function WalletNavbar(props) {
         className="nav-right"
         style={{ float: "right", margin: "0px 24px 16px 0" }}
       >
-        <Space>
-          <div className="nav-search">
-            <Search
-              placeholder="Search for addresses, transactions, cases, and customers..."
-              allowClear
-              onSearch={onSearch}
-              style={{ width: 200,}}
-            />
-          </div>
+        <Space direction="horizontal">
+          <Search
+            placeholder="Search for addresses, transactions, cases, and customers..."
+            allowClear
+            onSearch={onSearch}
+            style={{ width: 300, verticalAlign: "middle" }}
+            enterButton
+          />
           <div>
             <a href="" className="icon-button">
               <SettingFilled
@@ -80,12 +80,11 @@ function WalletNavbar(props) {
       />
     </Header>
   );
-};
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchWallet: (wallet) =>
-      dispatch(fetchWallet(wallet)),
+    fetchWallet: (wallet) => dispatch(fetchWallet(wallet)),
   };
 };
 

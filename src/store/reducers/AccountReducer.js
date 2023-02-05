@@ -10,25 +10,36 @@ const AccountReducer = (state = initState, action) => {
   let wallets = state.wallets;
   switch (action.type) {
     case "ACCOUNT_LOADING_SUCCESS":
-      let curWallet = action.wallet;
+      let curWallet = action.wallet.wallet;
+      curWallet.transactions = action.wallet.transactions;
       if (!_.isEmpty(curWallet)) {
         wallets.push(curWallet);
       }
       wallets = _.uniq(wallets);
-      console.log("single wallet load success", curWallet, " new wallets ", wallets);
+      console.log(
+        "single wallet load success",
+        curWallet,
+        " new wallets ",
+        wallets
+      );
       return {
         ...state,
         currentWallet: curWallet,
-        wallets: wallets
+        wallets: wallets,
       };
-    case "ALL_ACCOUNT_LOADING_SUCCESS": 
+    case "ALL_ACCOUNT_LOADING_SUCCESS":
       wallets = action.wallets;
-      wallets = _.uniq(action.wallets, false, e => e.address);
-      console.log("all wallets load success", action.wallets, " filterd wallets ", wallets);
+      wallets = _.uniq(action.wallets, false, (e) => e.address);
+      console.log(
+        "all wallets load success",
+        action.wallets,
+        " filterd wallets ",
+        wallets
+      );
       return {
         ...state,
         currentWallet: {},
-        wallets: wallets
+        wallets: wallets,
       };
     case "ACCOUNT_LOADING_FAILURE":
       console.log("wallet load failure", action.error);

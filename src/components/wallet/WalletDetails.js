@@ -33,12 +33,16 @@ function WalletDetails(props) {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (_.isEmpty(props.currentWallet) || 
-        props.currentWallet.id != wallet_addr) {
+    if (
+      _.isEmpty(props.currentWallet) ||
+      props.currentWallet.id != wallet_addr
+    ) {
       console.log("WalletDetails fetching wallet_addr :", wallet_addr);
       props.fetchWallet(wallet_addr);
     }
   }, []);
+
+  console.log("CURRENT WALLET >>>", props.currentWallet);
 
   console.log("Rendering WalletDetails wallet ", wallet_addr, " props ", props);
 
@@ -116,19 +120,19 @@ function WalletDetails(props) {
                       key: "1",
                       name: "Balance:",
                       eth: props.currentWallet.currentBalance,
-                      usd: 1500*props.currentWallet.currentBalance,
+                      usd: 1500 * props.currentWallet.currentBalance,
                     },
                     {
                       key: "2",
                       name: "Total Received:",
                       eth: props.currentWallet.received,
-                      usd: 1500*props.currentWallet.received,
+                      usd: 1500 * props.currentWallet.received,
                     },
                     {
                       key: "3",
                       name: "Total Spent: ",
                       eth: props.currentWallet.sent,
-                      usd: 1500*props.currentWallet.sent,
+                      usd: 1500 * props.currentWallet.sent,
                     },
                   ]}
                   size="middle"
@@ -227,8 +231,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchWallet: (wallet) =>
-      dispatch(fetchWallet(wallet)),
+    fetchWallet: (wallet) => dispatch(fetchWallet(wallet)),
   };
 };
 

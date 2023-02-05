@@ -3,7 +3,7 @@ import { Buffer } from "buffer";
 
 const graph_url = "http://localhost:3001/accounts/";
 const planner_url = "http://localhost:10000/v1/wallets";
-const screened_wallets_url = "http://localhost:10000/v1/wallet-screen"
+const screened_wallets_url = "http://localhost:10000/v1/wallet-screen";
 
 export const fetchWallet = (wallet) => {
   return (dispatch) => {
@@ -16,7 +16,7 @@ export const fetchWallet = (wallet) => {
       .then(
         (wallet) => {
           if (!_.isEmpty(wallet) && !_.isEmpty(wallet.blob)) {
-            wallet = JSON.parse(Buffer.from(wallet.blob, 'base64'));
+            wallet = JSON.parse(Buffer.from(wallet.blob, "base64"));
             dispatch({ type: "ACCOUNT_LOADING_SUCCESS", wallet: wallet });
           } else if (!_.isEmpty(wallet)) {
             dispatch({ type: "ACCOUNT_LOADING_SUCCESS", wallet: wallet });
@@ -37,16 +37,20 @@ export const fetchWallet = (wallet) => {
 
 export const fetchScreenedWallets = () => {
   return (dispatch) => {
-    const screen_url = screened_wallets_url;  // graph_url
+    const screen_url = screened_wallets_url; // graph_url
     console.log("fecthing screen wallets ", screen_url);
     fetch(screen_url, { method: "GET" })
       .then((response) => response.json())
       .then(
         (wallets) => {
+          console.log(wallets);
           if (!_.isEmpty(wallets) && !_.isEmpty(wallets.blob)) {
-            wallets = JSON.parse(Buffer.from(wallets.blob, 'base64'));
+            wallets = JSON.parse(Buffer.from(wallets.blob, "base64"));
             console.log("screen wallet loading ", wallets.wallets);
-            dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", wallets: wallets.wallets });
+            dispatch({
+              type: "ALL_ACCOUNT_LOADING_SUCCESS",
+              wallets: wallets.wallets,
+            });
           } else if (!_.isEmpty(wallets)) {
             dispatch({ type: "ALL_ACCOUNT_LOADING_SUCCESS", wallets: wallets });
           } else {
