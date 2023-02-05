@@ -27,7 +27,7 @@ const AccountReducer = (state = initState, action) => {
         currentWallet: curWallet,
         wallets: wallets,
       };
-    case "ALL_ACCOUNT_LOADING_SUCCESS":
+    case "ALL_ACCOUNT_LOADING_SUCCESS": 
       wallets = action.wallets;
       wallets = _.uniq(action.wallets, false, (e) => e.address);
       console.log(

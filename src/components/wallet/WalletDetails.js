@@ -44,7 +44,7 @@ function WalletDetails(props) {
 
   console.log("CURRENT WALLET >>>", props.currentWallet);
 
-  console.log("Rendering WalletDetails wallet ", wallet_addr, " props ", props);
+  console.log("Rendering WalletDetails wallet ", useParams(), " wallet_addr ", wallet_addr, " props ", props);
 
   const copyAddress = () => {
     navigator.clipboard.writeText(props.currentWallet.id);

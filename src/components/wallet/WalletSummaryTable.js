@@ -132,7 +132,7 @@ function WalletSummaryTable(props) {
       dataIndex: "address",
       key: "address",
       render: (text, record) => (
-        <Link to={"/wallet-details/" + record.id}>{text}</Link>
+        <Link to={"/wallet-details/" + text}>{text}</Link>
       ),
     },
     {

@@ -21,12 +21,6 @@ function WalletGraphView(props) {
   var width = 1500;
   var height = 0;
 
-  // const riskColor = (risk, name) => {
-  //   if (risk == "High") return <div style={{ color: "#f5222d" }}>{name}</div>;
-  //   if (risk == "Medium") return <div style={{ color: "#ffc53d" }}>{name}</div>;
-  //   if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
-  // };
-
   const data = {
     // The array of nodes
     nodes: [],
@@ -36,14 +30,7 @@ function WalletGraphView(props) {
 
   console.log("txnDATA>>>", props.currentWallet.transactions);
 
-  // 0x1eb01694e69d01cd2a5efe2ca7998a8b707dfcec
-  // 0x0c6646c18481d55c4f993f5a029c6b5144259cba
-  // 0x542e843da19b3894b46f59700245eb4cef53626e
-  // 0x1ffd84bf9ffc34122402f2e90f56a2d9b45686f0
-  // 0x04786aada9deea2150deab7b3b8911c309f5ed90
-
-  // 0x04786aada9deea2150deab7b3b8911c309f5ed90
-
+  // const txnData = props.currentWallet.transactions;
   const txnData = [
     {
       id: "0xacb4c9c7ec4fbccacffd4d32303d963cac4b4a58c97246540861216d05682f71",
@@ -137,7 +124,9 @@ function WalletGraphView(props) {
       activityTime: "2016-05-12T08:54:40Z",
     },
   ];
+  
 
+  console.log("rendering graph view props: ", props);
   useEffect(() => {
     console.log(graph);
     if (!graph) {
@@ -229,6 +218,7 @@ function WalletGraphView(props) {
         },
       },
     });
+
     for (const txn of txnData) {
       height += 100;
       if (txn.fromAddress == props.currentWallet.id) {

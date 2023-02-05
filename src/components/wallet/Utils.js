@@ -31,8 +31,8 @@ export const riskTriggeredColor = (riskTriggered) => {
 
 export const shortenAddress = (address) => {
   return (
-    address.substring(0, 3) +
+    address.substring(0, 5) +
     "..." +
-    address.substring(address.length - 4, address.length - 1)
+    address.substring(address.length - 4, address.length)
   );
 };
