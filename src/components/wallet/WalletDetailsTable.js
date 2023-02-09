@@ -156,7 +156,7 @@ function WalletDetailsTable(props) {
 
   console.log("rendering WalletDetailsTable props ", props);
   const data = [];
-  if (!_.isEmpty(props.currentWallet)) {
+  if (!_.isEmpty(props.currentWallet) && !_.isEmpty(props.currentWallet.transactions)) {
     for (const txn of props.currentWallet.transactions) {
       data.push({
         key: txn.id,

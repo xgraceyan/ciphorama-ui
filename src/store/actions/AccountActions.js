@@ -8,7 +8,7 @@ const screened_wallets_url = "http://localhost:10000/v1/wallet-screen";
 export const fetchWallet = (wallet) => {
   return (dispatch) => {
     // const account_url = graph_url + account;
-    const wallet = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
+    // const wallet = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
     const account_url = planner_url + "?id=" + wallet;
     console.log("fetching wallet url ", account_url);
     fetch(account_url, { method: "GET" })
