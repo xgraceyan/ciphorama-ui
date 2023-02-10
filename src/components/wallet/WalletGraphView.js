@@ -7,11 +7,46 @@ import _ from "underscore";
 import { shortenAddress } from "./Utils";
 var ReactDOM = require("react-dom");
 
+function CreateNode(txn, x, y) {
+  return {
+    id: txn.toAddress,
+    // x: x,
+    // y: y,
+    size: 80,
+    label:
+      shortenAddress(txn.toAddress) +
+      "\n" +
+      txn.value +
+      " " +
+      txn.assetType,
+    data: txn,
+  }
+}
+
+function CreateEdge(txn) {
+  var src, target;
+  if (txn.direction == "Inbound") {
+    src = txn.toAddress;
+    target = txn.fromAddress;
+  } else {
+    src = txn.fromAddress;
+    target = txn.toAddress;
+  }
+  return {
+    type: "quadratic",
+    source: src,
+    target: target,
+    label: shortenAddress(txn.id),
+    data: txn,
+    // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
+  }
+}
+
 function WalletGraphView(props) {
   const ref = React.useRef(null);
   const [graph, setGraph] = useState(null);
-  var width = 1500;
-  var height = 0;
+  var width = 1400;
+  var height = 800;
 
   useEffect(() => {
     if (!graph) {
@@ -47,7 +82,10 @@ function WalletGraphView(props) {
           },
           modes: {
             default: [
-              "drag-node",
+              { type: 'drag-canvas',},
+              { type: 'drag-node', },
+              { type: 'click-select' },
+              { type: 'activate-relations'},
               {
                 type: "tooltip",
                 formatText(model) {
@@ -84,6 +122,13 @@ function WalletGraphView(props) {
                 },
               },
             ],
+            layout: {
+              type: 'dendrogram', // 'mindmap', // 'dendrogram', // 'indented', // , // Layout type
+              direction: 'LR', // Layout direction is from the left to the right. Options: 'H' / 'V' / 'LR' / 'RL' / 'TB' / 'BT'
+              // nodeSep: 20, // The distance between nodes
+              // rankSep: 10, // The distance between adjacent levels
+              // radial: true,
+            },
           },
         })
       );
@@ -284,8 +329,8 @@ function WalletGraphView(props) {
   if (!_.isEmpty(currentWallet) && !_.isEmpty(currentWallet.transactions)) {
     const transactions = currentWallet.transactions;
     height = 0;
-    var yCoordGap = height / transactions.length;
-    const xCoordGap = 160;
+    var yCoordGap = 20; // height / transactions.length;
+    const xCoordGap = 30;
     var yCoord = yCoordGap;
     var xCoord = xCoordGap;
 
@@ -297,8 +342,8 @@ function WalletGraphView(props) {
         currentWallet.currentBalance +
         " " +
         currentWallet.assetType, // The label of the node
-      x: 0,
-      y: height / 2,
+      // x: 0,
+      // y: height / 2,
       size: 120,
       labelCfg: {
         style: {
@@ -314,109 +359,36 @@ function WalletGraphView(props) {
     var multiEdgeNodes = [];
 
     queue.push(currentWallet.id);
+    var levelLen = queue.length;
 
     while (!_.isEmpty(queue)) {
       const headAddr = queue.pop();
+      levelLen--;
+      if (levelLen == 0) {
+        yCoord = 10;   // reset up one breadth level.  
+      }
       for (const txn of transactions) {
-        height += 5;
-        yCoordGap = 0;
-
         if (
           txn.fromAddress == headAddr &&
-          !processedTxns.includes(txn.id) &&
-          !existingNodes.includes(txn.toAddress)
+          !processedTxns.includes(txn.id) 
+          // && !existingNodes.includes(txn.toAddress)
         ) {
           queue.push(txn.toAddress);
           processedTxns.push(txn.id);
           existingNodes.push(txn.toAddress);
 
-          if (processedNodes.includes(txn.fromAddress)) {
-            graphData.nodes.push({
-              id: txn.toAddress,
-              x: xCoord - xCoordGap,
-              y: yCoord - yCoordGap + 150,
-              label:
-                shortenAddress(txn.toAddress) +
-                "\n" +
-                txn.value +
-                " " +
-                txn.assetType,
-              data: txn,
-            });
-          } else if (multiEdgeNodes.includes(txn.fromAddress)) {
-            graphData.nodes.push({
-              id: txn.toAddress,
-              x: xCoord,
-              y: yCoord - 200,
-              label:
-                shortenAddress(txn.toAddress) +
-                "\n" +
-                txn.value +
-                " " +
-                txn.assetType,
-              data: txn,
-            });
-          } else {
-            graphData.nodes.push({
-              id: txn.toAddress,
-              x: xCoord,
-              y: -80,
-              label:
-                shortenAddress(txn.toAddress) +
-                "\n" +
-                txn.value +
-                " " +
-                txn.assetType,
-              data: txn,
-            });
+          yCoord += 100;
+          graphData.nodes.push(CreateNode(txn, xCoord - xCoordGap, yCoord - yCoordGap + 150));
+          if (yCoord > height) {
+            height = yCoord;
           }
-
-          processedNodes.push(txn.fromAddress);
-          if (txn.direction == "Inbound") {
-            graphData.edges.push({
-              type: "quadratic",
-              source: txn.toAddress,
-              target: headAddr,
-              label: shortenAddress(txn.id),
-              data: txn,
-              // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
-            });
-          } else {
-            graphData.edges.push({
-              type: "quadratic",
-              source: headAddr,
-              target: txn.toAddress,
-              label: shortenAddress(txn.id),
-              data: txn,
-              // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
-            });
-          }
-          yCoord += yCoordGap;
-          xCoord += xCoordGap;
-        } else if (txn.fromAddress == headAddr && !processedTxns.includes(txn.id)) {
-          queue.push(txn.toAddress);
-          processedTxns.push(txn.id);
-          multiEdgeNodes.push(txn.toAddress);
-          if (txn.direction == "Inbound") {
-            graphData.edges.push({
-              type: "quadratic",
-              source: txn.toAddress,
-              target: headAddr,
-              label: shortenAddress(txn.id),
-              data: txn,
-              // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
-            });
-          } else {
-            graphData.edges.push({
-              type: "quadratic",
-              source: headAddr,
-              target: txn.toAddress,
-              label: shortenAddress(txn.id),
-              data: txn,
-              // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
-            });
-          }
-        }
+          graphData.edges.push(CreateEdge(txn));
+          console.log("rendering node x, y", xCoord - xCoordGap, yCoord - yCoordGap + 150, yCoord, height);
+        } 
+      }
+      xCoord += 200;
+      if (levelLen == 0) {
+        levelLen = queue.length;
       }
     }
   }
@@ -424,7 +396,7 @@ function WalletGraphView(props) {
   if (graph) {
     graph.data(graphData);
     G6.Util.processParallelEdges(graphData.edges, 20);
-    graph.changeSize(width, height);
+    graph.changeSize(width, 800);
     graph.render();
     graph.fitCenter();
 
@@ -433,7 +405,7 @@ function WalletGraphView(props) {
     });
 
     graph.on("node:click", (event) => {
-      console.log(" node:click => ", event.item);
+      console.log(" node:click => ", event);
       window.location.replace("/wallet-details/" + event.item._cfg.model.id);
     });
   }
