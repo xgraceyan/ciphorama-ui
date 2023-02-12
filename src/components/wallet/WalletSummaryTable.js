@@ -13,6 +13,7 @@ import {
   formatDate,
   EthereumIcon,
   TextWithBox,
+  shortenAddress
 } from "../Utils";
 import moment from "moment";
 import _ from "underscore";
@@ -145,7 +146,7 @@ function WalletSummaryTable(props) {
       dataIndex: "address",
       key: "address",
       render: (text, record) => (
-        <Link to={"/wallet-details/" + text}>{text}</Link>
+        <Link to={"/wallet-details/" + text}>{shortenAddress(text)}</Link>
       ),
     },
     {
@@ -212,9 +213,12 @@ function WalletSummaryTable(props) {
       data.push({
         key: wallet.id,
         transactionId: wallet.id,
+        // risk: riskColor(
+        //   riskScoreCalc(wallet.riskScore),
+        //   riskScoreCalc(wallet.riskScore)
+        // ),
         risk: riskColor(
-          riskScoreCalc(wallet.riskScore),
-          riskScoreCalc(wallet.riskScore)
+          wallet.risk,wallet.risk
         ),
         address: wallet.address,
         riskTriggered: riskTriggeredColor(wallet.riskTriggered),

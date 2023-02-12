@@ -13,9 +13,12 @@ import {
   convertToPrecision, 
   shortenAddress, 
   EthereumIcon, 
-  generateWalletUrl
+  generateWalletUrl,
+  riskBadgeColor,
+  colorCodedNumber
 } from "../Utils";
 import { CryptoPrecision } from "../../Constants";
+
 
 function WalletDetailsTable(props) {
   const [searchText, setSearchText] = useState("");
@@ -115,7 +118,7 @@ function WalletDetailsTable(props) {
 
   const columns = [
     {
-      title: "Risk Severity",
+      title: "Score",
       dataIndex: "risk",
       key: "risk",
     },
@@ -130,18 +133,18 @@ function WalletDetailsTable(props) {
       key: "direction",
     },
     {
-      title: "From Address",
+      title: "From",
       dataIndex: "fromAddress",
       key: "fromAddress",
       render: (text)=> generateWalletUrl(text),
-      sorter: (a, b) => a.localeCompare(b),
+      sorter: (a, b) => a.value < b.value,
     },
     {
-      title: "To Address",
+      title: "To",
       dataIndex: "toAddress",
       key: "toAddress",
       render: (text)=> generateWalletUrl(text),
-      sorter: (a, b) => a.localeCompare(b),
+      sorter: (a, b) => a.value < b.value,
     },
     // {
     //   title: "Counterparty Address",
@@ -185,11 +188,12 @@ function WalletDetailsTable(props) {
   if (!_.isEmpty(props.currentWallet) && !_.isEmpty(props.currentWallet.transactions)) {
     console.log(props.currentWallet.transactions)
     for (const txn of props.currentWallet.transactions) {
-      console.log(txn)
+      // console.log(txn)
       data.push({
         key: txn.id,
         transactionId: txn.id,
-        risk: riskColor(txn.risk, txn.risk),
+        // risk: riskColor(txn.risk, txn.risk),
+        risk: colorCodedNumber(txn.riskScore, riskBadgeColor(txn.risk)),
         riskTriggered: riskColor(riskScoreCalc(txn.riskScore), txn.riskTriggered),
         direction: txn.direction,
         fromAddress: txn.fromAddress,
