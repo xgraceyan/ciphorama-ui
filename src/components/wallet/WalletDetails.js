@@ -177,14 +177,20 @@ function WalletDetails(props) {
                     {
                       key: "2",
                       1: "Wallet Creation Time:",
-                      2: props.currentWallet.createdAt, //moment.unix(props.currentWallet.createdAt).format("YYYY-MM-DD hh:mm:ss"),
+                      2: moment(props.currentWallet.createdAt).format(
+                        "YYYY-MM-DD hh:mm:ss"
+                      ),
                       3: "Last Activity Time:",
-                      4: props.currentWallet.lastActivityTime,
+                      4: moment(props.currentWallet.lastActivityTime).format(
+                        "YYYY-MM-DD hh:mm:ss"
+                      ),
                     },
                     {
                       key: "3",
                       1: "Last Screened Time: ",
-                      2: props.currentWallet.lastScreenedTime,
+                      2: moment(props.currentWallet.createdAt).format(
+                        "YYYY-MM-DD hh:mm:ss"
+                      ),
                       3: "Last Screened By: ",
                       4: props.currentWallet.lastScreenedBy,
                     },

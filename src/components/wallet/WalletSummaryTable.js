@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Table, Tag, Space, Inflow, Button, DatePicker } from "antd";
-import { SearchOutlined, SignalFilled } from "@ant-design/icons";
+import { Table, Tag, Space, Inflow, Button, DatePicker, Tooltip } from "antd";
+import { SearchOutlined, SignalFilled, MoreOutlined } from "@ant-design/icons";
+import { FaEthereum } from "react-icons/fa";
 import { riskColor, riskScoreCalc, riskTriggeredColor } from "../../Utils";
 import moment from "moment";
 import _ from "underscore";
@@ -104,6 +105,31 @@ function WalletSummaryTable(props) {
     render: (text) => text, // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
   });
 
+  function riskTriggeredSearch(riskTriggered) {
+    if (!_.isEmpty(riskTriggered)) {
+      if (riskTriggered.length > 2) {
+        return (
+          <Space>
+            {riskTriggered[0]}
+            {riskTriggered[1]}
+            <Tooltip title={riskTriggered}>
+              <MoreOutlined style={{ cursor: "pointer" }} />
+            </Tooltip>
+          </Space>
+        );
+      } else {
+        return (
+          <Space>
+            {riskTriggered[0]}
+            {riskTriggered[1]}
+          </Space>
+        );
+      }
+    } else {
+      return null;
+    }
+  }
+
   const columns = [
     {
       title: "Risk",
@@ -139,11 +165,16 @@ function WalletSummaryTable(props) {
       title: "Risk Triggered",
       dataIndex: "riskTriggered",
       key: "riskTriggered",
+      render: (riskTriggered) => riskTriggeredSearch(riskTriggered),
     },
     {
       title: "AssetType",
       dataIndex: "assetType",
       key: "assetType",
+      className: "rowCenter",
+      render: () => (
+        <FaEthereum style={{ transform: "scale(1.5)", textAlign: "center" }} />
+      ),
       filters: [
         {
           text: "ETH",
@@ -166,14 +197,12 @@ function WalletSummaryTable(props) {
       title: "Inflow (USD)",
       dataIndex: "inflow",
       key: "inflow",
-      render: (text) => text + " USD",
       sorter: (a, b) => a.inflow - b.inflow,
     },
     {
       title: "Outflow (USD)",
       dataIndex: "outflow",
       key: "outflow",
-      render: (text) => text + " USD",
       sorter: (a, b) => a.outflow - b.outflow,
     },
     {
@@ -187,6 +216,7 @@ function WalletSummaryTable(props) {
       key: "date",
       ...getColumnSearchProps("date"),
       filterIcon: <SignalFilled />,
+      render: (date) => moment(date).format("YYYY-MM-DD hh:mm:ss"),
     },
   ];
 

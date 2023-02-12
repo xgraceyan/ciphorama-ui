@@ -141,6 +141,10 @@ code {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
+.rowCenter {
+  text-align: center;
+}
+
 .wallet-details-col {
   margin-top: 15px;
   padding: 1rem 2rem 2rem 2rem !important;

@@ -151,6 +151,7 @@ function WalletDetailsTable(props) {
       key: "date",
       ...getColumnSearchProps("date"),
       filterIcon: <SignalFilled />,
+      render: (date) => moment(date).format("YYYY-MM-DD hh:mm:ss"),
     },
   ];
 
