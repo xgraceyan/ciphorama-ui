@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { riskColor, riskTriggeredColor } from "./Utils";
+import { riskColor, riskTriggeredColor } from "../../Utils";
 import moment from "moment";
 import _ from "underscore";
 
@@ -156,7 +156,10 @@ function WalletDetailsTable(props) {
 
   console.log("rendering WalletDetailsTable props ", props);
   const data = [];
-  if (!_.isEmpty(props.currentWallet) && !_.isEmpty(props.currentWallet.transactions)) {
+  if (
+    !_.isEmpty(props.currentWallet) &&
+    !_.isEmpty(props.currentWallet.transactions)
+  ) {
     for (const txn of props.currentWallet.transactions) {
       data.push({
         key: txn.id,

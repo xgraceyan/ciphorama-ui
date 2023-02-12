@@ -6,6 +6,13 @@ export const riskColor = (risk, name) => {
   if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
 };
 
+export const riskColorAlt = (risk, name) => {
+  if (risk == "Critical") return <div style={{ color: "#f5222d" }}>{name}</div>;
+  if (risk == "High") return <div style={{ color: "#ffa940" }}>{name}</div>;
+  if (risk == "Medium") return <div style={{ color: "#fadb14" }}>{name}</div>;
+  if (risk == "Low") return <div style={{ color: "#52c41a" }}>{name}</div>;
+};
+
 export const riskBadgeColor = (risk) => {
   if (risk == "High") return "red";
   if (risk == "Medium") return "gold";

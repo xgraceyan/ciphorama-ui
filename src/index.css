@@ -137,6 +137,10 @@ code {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
+.tableRowDark {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
 .wallet-details-col {
   margin-top: 15px;
   padding: 1rem 2rem 2rem 2rem !important;

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout, Menu, Space } from "antd";
 import Title from "antd/es/typography/Title";
 import Paragraph from "antd/es/typography/Paragraph";
@@ -13,7 +14,8 @@ import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
 
-const Sidebar = ({ pageIndex = -1 }) => {
+function Sidebar({ pageIndex = -1 }) {
+  let navigate = useNavigate();
   return (
     <Sider
       breakpoint="lg"
@@ -56,16 +58,21 @@ const Sidebar = ({ pageIndex = -1 }) => {
         mode="inline"
         style={{ backgroundColor: "#112545" }}
         defaultSelectedKeys={pageIndex != -1 ? [pageIndex.toString()] : []}
+        onClick={(e) => {
+          navigate(e.item.props.path);
+        }}
         items={[
           {
-            label: <Link to="/">Dashboard</Link>,
+            label: "Dashboard",
             icon: <DashboardOutlined />,
             key: "0",
+            path: "/",
           },
           {
             label: "Risk Rules",
             icon: <WarningOutlined />,
             key: "1",
+            path: "/risk-rules",
           },
           {
             label: "Wiki",
@@ -100,6 +107,6 @@ const Sidebar = ({ pageIndex = -1 }) => {
       />
     </Sider>
   );
-};
+}
 
 export default Sidebar;

@@ -23,7 +23,11 @@ import WalletNavbar from "./WalletNavbar";
 import moment from "moment";
 import WalletScanTable from "./WalletScanTable";
 import WalletGraphView from "./WalletGraphView";
-import { riskBadgeColor, riskScoreColor, riskTriggeredColor } from "./Utils";
+import {
+  riskBadgeColor,
+  riskScoreColor,
+  riskTriggeredColor,
+} from "../../Utils";
 
 function WalletDetails(props) {
   let { wallet_addr } = useParams();
@@ -44,7 +48,14 @@ function WalletDetails(props) {
 
   console.log("CURRENT WALLET >>>", props.currentWallet);
 
-  console.log("Rendering WalletDetails wallet ", useParams(), " wallet_addr ", wallet_addr, " props ", props);
+  console.log(
+    "Rendering WalletDetails wallet ",
+    useParams(),
+    " wallet_addr ",
+    wallet_addr,
+    " props ",
+    props
+  );
 
   const copyAddress = () => {
     navigator.clipboard.writeText(props.currentWallet.id);

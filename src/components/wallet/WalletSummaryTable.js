@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Table, Tag, Space, Inflow, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { riskColor, riskScoreCalc, riskTriggeredColor } from "./Utils";
+import { riskColor, riskScoreCalc, riskTriggeredColor } from "../../Utils";
 import moment from "moment";
 import _ from "underscore";
 
@@ -147,20 +147,20 @@ function WalletSummaryTable(props) {
       filters: [
         {
           text: "ETH",
-          value: "ETH",
+          value: "eth",
         },
         {
           text: "BNB",
-          value: "BNB",
+          value: "bnb",
         },
         {
           text: "BTC",
-          value: "BTC",
+          value: "btc",
         },
       ],
       filterMode: "tree",
       filterSearch: true,
-      onFilter: (value, record) => record.asset.startsWith(value),
+      onFilter: (value, record) => record.assetType.startsWith(value),
     },
     {
       title: "Inflow (USD)",
