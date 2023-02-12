@@ -125,6 +125,10 @@ function WalletSummaryTable(props) {
       //  <Tag color={riskBadgeColor(text)}  style={{ transform: "scale(1.2)" }} > <b>{text} </b></Tag>,
       filters: [
         {
+          text: "Critical",
+          value: "Critical",
+        },
+        {
           text: "High",
           value: "High",
         },

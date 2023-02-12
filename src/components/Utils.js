@@ -12,17 +12,10 @@ export const riskColor = (risk, name) => {
   if (risk == 'Low') return <div style={{ color: '#52c41a' }}>{name}</div>
 }
 
-export const riskColor1 = (risk, name) => {
+export const riskColorAlt = (risk, name) => {
   if (risk == 'Critical') return <div style={{ color: '#800000' }}>{name}</div>
   if (risk == 'High') return <div style={{ color: '#f5222d' }}>{name}</div>
   if (risk == 'Medium') return <div style={{ color: '#ffc53d' }}>{name}</div>
-  if (risk == 'Low') return <div style={{ color: '#52c41a' }}>{name}</div>
-}
-
-export const riskColorAlt = (risk, name) => {
-  if (risk == 'Critical') return <div style={{ color: '#f5222d' }}>{name}</div>
-  if (risk == 'High') return <div style={{ color: '#ffa940' }}>{name}</div>
-  if (risk == 'Medium') return <div style={{ color: '#fadb14' }}>{name}</div>
   if (risk == 'Low') return <div style={{ color: '#52c41a' }}>{name}</div>
 }
 
@@ -30,7 +23,7 @@ export const riskBadgeColor = risk => {
   if (risk == 'Critical') return 'maroon'
   if (risk == 'High') return 'red'
   if (risk == 'Medium') return 'gold'
-  if (risk == 'Low') return 'green'
+if (risk == 'Low') return 'green'
 }
 
 export const riskScoreCalc = riskScore => {
@@ -42,7 +35,7 @@ export const riskScoreCalc = riskScore => {
 
 export const riskTriggeredColor = riskTriggered => {
   var riskArr = []
-  console.log('RISKTRIGGERD >> ', riskTriggered)
+  // console.log('RISKTRIGGERD >> ', riskTriggered)
   if (!_.isEmpty(riskTriggered)) {
     riskTriggered.forEach(risk => {
       riskArr.push(riskColor(risk.riskLevel, risk.name))
@@ -62,7 +55,7 @@ export const riskTriggeredSearch = riskTriggered => {
             style={{ transform: 'scale(1.1)' }}
           >
             {' '}
-            <b>{riskTriggered[0]} </b>
+            {riskTriggered[0]} 
           </Tag>
         </Space>
       )
@@ -74,14 +67,14 @@ export const riskTriggeredSearch = riskTriggered => {
             style={{ transform: 'scale(1.1)' }}
           >
             {' '}
-            <b>{riskTriggered[0]} </b>
+            {riskTriggered[0]} 
           </Tag>
           <Tag
             color={riskBadgeColor(riskTriggered[1])}
             style={{ transform: 'scale(1.1)' }}
           >
             {' '}
-            <b>{riskTriggered[1]} </b>
+            {riskTriggered[1]} 
           </Tag>
         </Space>
       )
@@ -93,14 +86,14 @@ export const riskTriggeredSearch = riskTriggered => {
             style={{ transform: 'scale(1.1)' }}
           >
             {' '}
-            <b>{riskTriggered[0]} </b>
+            {riskTriggered[0]} 
           </Tag>
           <Tag
             color={riskBadgeColor(riskTriggered[1])}
             style={{ transform: 'scale(1.1)' }}
           >
             {' '}
-            <b>{riskTriggered[1]} </b>
+            {riskTriggered[1]}
           </Tag>
           <Tooltip title={riskTriggered}>
             <MoreOutlined style={{ cursor: 'pointer' }} />
@@ -179,9 +172,18 @@ export function generateWalletUrl (text) {
 
 export const TextWithBox = text => {
   return (
-    <Tag color={riskBadgeColor(text)} style={{ transform: 'scale(1.2)' }}>
+    <Tag color={riskBadgeColor(text)} style={{ transform: 'scale(1.1)' }}>
       {' '}
       <b>{text} </b>
+    </Tag>
+  )
+}
+
+export function TextWithBoxColor (text, color) {
+  return (
+    <Tag color={color} style={{ transform: 'scale(1.1)' }}>
+      {' '}
+      {text}
     </Tag>
   )
 }

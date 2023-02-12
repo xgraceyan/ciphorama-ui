@@ -3,11 +3,14 @@ import { Buffer } from "buffer";
 import { graph_url, planner_url, screened_wallets_url} from "../../Constants";
 
 
-export const fetchWallet = (wallet) => {
+export const fetchWallet = (wallet, save_wallet = true) => {
   return (dispatch) => {
     // const account_url = graph_url + account;
     // const wallet = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
-    const account_url = planner_url + "?id=" + wallet;
+    var account_url = planner_url + "?id=" + wallet;
+    if (save_wallet) {
+      account_url += "&save=true";
+    }
     console.log("fetching wallet url ", account_url);
     fetch(account_url, { method: "GET" })
       .then((response) => response.json())

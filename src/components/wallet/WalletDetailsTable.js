@@ -15,7 +15,7 @@ import {
   EthereumIcon, 
   generateWalletUrl,
   riskBadgeColor,
-  colorCodedNumber
+  TextWithBoxColor
 } from "../Utils";
 import { CryptoPrecision } from "../../Constants";
 
@@ -118,7 +118,7 @@ function WalletDetailsTable(props) {
 
   const columns = [
     {
-      title: "Score",
+      title: "Severity",
       dataIndex: "risk",
       key: "risk",
     },
@@ -126,6 +126,7 @@ function WalletDetailsTable(props) {
       title: "Risk Triggered",
       dataIndex: "riskTriggered",
       key: "riskTriggered",
+      sorter: (a, b) => a.value < b.value,
     },
     {
       title: "Direction",
@@ -192,9 +193,9 @@ function WalletDetailsTable(props) {
       data.push({
         key: txn.id,
         transactionId: txn.id,
-        // risk: riskColor(txn.risk, txn.risk),
-        risk: colorCodedNumber(txn.riskScore, riskBadgeColor(txn.risk)),
-        riskTriggered: riskColor(riskScoreCalc(txn.riskScore), txn.riskTriggered),
+        risk: riskColor(txn.risk, txn.risk),
+        // risk: colorCodedNumber(txn.riskScore, riskBadgeColor(txn.risk)),
+        riskTriggered: TextWithBoxColor(txn.riskTriggered, "#A9CCE3"),
         direction: txn.direction,
         fromAddress: txn.fromAddress,
         toAddress: txn.toAddress,
