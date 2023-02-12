@@ -1,10 +1,21 @@
+import moment from "moment";
+import _ from "underscore";
 import React, { useRef, useState } from "react";
+import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { riskColor, riskTriggeredColor } from "../../Utils";
-import moment from "moment";
-import _ from "underscore";
+import { 
+  riskColor, 
+  riskTriggeredColor, 
+  riskScoreCalc, 
+  formatDate, 
+  convertToPrecision, 
+  shortenAddress, 
+  EthereumIcon, 
+  generateWalletUrl
+} from "../Utils";
+import { CryptoPrecision } from "../../Constants";
 
 function WalletDetailsTable(props) {
   const [searchText, setSearchText] = useState("");
@@ -99,7 +110,7 @@ function WalletDetailsTable(props) {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    render: (text) => text, // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
+    render: (text) => formatDate(text), // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
   });
 
   const columns = [
@@ -119,26 +130,41 @@ function WalletDetailsTable(props) {
       key: "direction",
     },
     {
-      title: "Counterparty Address",
-      dataIndex: "counterAddress",
-      key: "counterAddress",
+      title: "From Address",
+      dataIndex: "fromAddress",
+      key: "fromAddress",
+      render: (text)=> generateWalletUrl(text),
+      sorter: (a, b) => a.localeCompare(b),
     },
     {
-      title: "Counterparty Entity",
-      dataIndex: "counterEntity",
-      key: "counterEntity",
+      title: "To Address",
+      dataIndex: "toAddress",
+      key: "toAddress",
+      render: (text)=> generateWalletUrl(text),
+      sorter: (a, b) => a.localeCompare(b),
     },
+    // {
+    //   title: "Counterparty Address",
+    //   dataIndex: "counterAddress",
+    //   key: "counterAddress",
+    // },
+    // {
+    //   title: "Counterparty Entity",
+    //   dataIndex: "counterEntity",
+    //   key: "counterEntity",
+    // },
     {
-      title: "AssetType",
+      title: "Asset",
       dataIndex: "assetType",
       key: "assetType",
+      render: () => EthereumIcon(),
     },
     {
-      title: "Volume (USD)",
-      dataIndex: "volume",
-      key: "volume",
-      render: (text) => text + " USD",
-      sorter: (a, b) => a.volume - b.volume,
+      title: "Value",
+      dataIndex: "value",
+      key: "value",
+      render: (text) => convertToPrecision(text, CryptoPrecision),
+      sorter: (a, b) => a.value - b.value,
     },
     {
       title: "Customer",
@@ -151,27 +177,26 @@ function WalletDetailsTable(props) {
       key: "date",
       ...getColumnSearchProps("date"),
       filterIcon: <SignalFilled />,
-      render: (date) => moment(date).format("YYYY-MM-DD hh:mm:ss"),
     },
   ];
 
   console.log("rendering WalletDetailsTable props ", props);
   const data = [];
-  if (
-    !_.isEmpty(props.currentWallet) &&
-    !_.isEmpty(props.currentWallet.transactions)
-  ) {
+  if (!_.isEmpty(props.currentWallet) && !_.isEmpty(props.currentWallet.transactions)) {
+    console.log(props.currentWallet.transactions)
     for (const txn of props.currentWallet.transactions) {
+      console.log(txn)
       data.push({
         key: txn.id,
         transactionId: txn.id,
         risk: riskColor(txn.risk, txn.risk),
-        riskTriggered: riskColor(txn.risk, txn.riskTriggered),
+        riskTriggered: riskColor(riskScoreCalc(txn.riskScore), txn.riskTriggered),
         direction: txn.direction,
-        counterAddress: txn.counterAddress,
+        fromAddress: txn.fromAddress,
+        toAddress: txn.toAddress,
         counterEntity: txn.counterEntity,
-        asset: txn.assetType,
-        volume: txn.volume,
+        assetType: txn.assetType,
+        value: txn.value,
         customer: txn.customer,
         date: txn.activityTime,
       });
@@ -182,7 +207,7 @@ function WalletDetailsTable(props) {
     <Table
       columns={columns}
       dataSource={data}
-      pagination={{ position: ["bottomRight"] }}
+      pagination={{ position: ["bottomRight"], defaultPageSize: 20 }}
       rowClassName="tableRow"
     />
   );

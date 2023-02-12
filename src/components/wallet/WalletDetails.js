@@ -23,11 +23,15 @@ import WalletNavbar from "./WalletNavbar";
 import moment from "moment";
 import WalletScanTable from "./WalletScanTable";
 import WalletGraphView from "./WalletGraphView";
-import {
-  riskBadgeColor,
-  riskScoreColor,
-  riskTriggeredColor,
-} from "../../Utils";
+import { 
+  riskBadgeColor, 
+  riskTriggeredColor, 
+  shortenAddress,
+  convertToPrecision, 
+  formatDate,
+  styledField
+} from "../Utils";
+import { USDPrecision, CryptoPrecision } from "../../Constants";
 
 function WalletDetails(props) {
   let { wallet_addr } = useParams();
@@ -48,14 +52,7 @@ function WalletDetails(props) {
 
   console.log("CURRENT WALLET >>>", props.currentWallet);
 
-  console.log(
-    "Rendering WalletDetails wallet ",
-    useParams(),
-    " wallet_addr ",
-    wallet_addr,
-    " props ",
-    props
-  );
+  console.log("Rendering WalletDetails wallet ", useParams(), " wallet_addr ", wallet_addr, " props ", props);
 
   const copyAddress = () => {
     navigator.clipboard.writeText(props.currentWallet.id);
@@ -77,7 +74,7 @@ function WalletDetails(props) {
                 }}
               >
                 <h1 style={{ fontSize: "1.8rem" }}>
-                  <span>Wallet Address: {props.currentWallet.id}</span>
+                  <span>Wallet Address: {shortenAddress(props.currentWallet.id)}</span>
                   &nbsp;
                   <span>
                     <Tooltip
@@ -129,21 +126,21 @@ function WalletDetails(props) {
                   dataSource={[
                     {
                       key: "1",
-                      name: "Balance:",
-                      eth: props.currentWallet.currentBalance,
-                      usd: 1500 * props.currentWallet.currentBalance,
+                      name: styledField("Balance:"),
+                      eth: convertToPrecision(props.currentWallet.currentBalance, CryptoPrecision),
+                      usd: convertToPrecision(props.currentWallet.ethPrice * props.currentWallet.currentBalance, USDPrecision),
                     },
                     {
                       key: "2",
-                      name: "Total Received:",
-                      eth: props.currentWallet.received,
-                      usd: 1500 * props.currentWallet.received,
+                      name: styledField("Total Received:"),
+                      eth: convertToPrecision(props.currentWallet.received, CryptoPrecision),
+                      usd: convertToPrecision(props.currentWallet.ethPrice * props.currentWallet.received, USDPrecision),
                     },
                     {
                       key: "3",
-                      name: "Total Spent: ",
-                      eth: props.currentWallet.sent,
-                      usd: 1500 * props.currentWallet.sent,
+                      name: styledField("Total Spent:"),
+                      eth: convertToPrecision(props.currentWallet.sent, CryptoPrecision),
+                      usd: convertToPrecision(props.currentWallet.ethPrice * props.currentWallet.sent, USDPrecision),
                     },
                   ]}
                   size="middle"
@@ -171,27 +168,21 @@ function WalletDetails(props) {
                   dataSource={[
                     {
                       key: "1",
-                      1: "Customer:",
+                      1: styledField("Customer:"),
                       2: props.currentWallet.customer,
                     },
                     {
                       key: "2",
-                      1: "Wallet Creation Time:",
-                      2: moment(props.currentWallet.createdAt).format(
-                        "YYYY-MM-DD hh:mm:ss"
-                      ),
-                      3: "Last Activity Time:",
-                      4: moment(props.currentWallet.lastActivityTime).format(
-                        "YYYY-MM-DD hh:mm:ss"
-                      ),
+                      1: styledField("Wallet Creation Time:"),
+                      2: formatDate(props.currentWallet.createdAt), //moment.unix(props.currentWallet.createdAt).format("YYYY-MM-DD hh:mm:ss"),
+                      3: styledField("Last Activity Time:"),
+                      4: formatDate(props.currentWallet.lastActivityTime),
                     },
                     {
                       key: "3",
-                      1: "Last Screened Time: ",
-                      2: moment(props.currentWallet.createdAt).format(
-                        "YYYY-MM-DD hh:mm:ss"
-                      ),
-                      3: "Last Screened By: ",
+                      1: styledField("Last Screened Time:"),
+                      2: formatDate(props.currentWallet.lastScreenedTime),
+                      3: styledField("Last Screened By:"),
                       4: props.currentWallet.lastScreenedBy,
                     },
                   ]}

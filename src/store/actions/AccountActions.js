@@ -1,9 +1,7 @@
 import _ from "underscore";
 import { Buffer } from "buffer";
+import { graph_url, planner_url, screened_wallets_url} from "../../Constants";
 
-const graph_url = "http://localhost:3001/accounts/";
-const planner_url = "http://localhost:10000/v1/wallets";
-const screened_wallets_url = "http://localhost:10000/v1/wallet-screen";
 
 export const fetchWallet = (wallet) => {
   return (dispatch) => {

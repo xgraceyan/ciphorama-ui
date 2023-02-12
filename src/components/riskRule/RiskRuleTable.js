@@ -2,9 +2,9 @@ import React from "react";
 import { Button, Col, Divider, Layout, Row, Select, Table } from "antd";
 import { FilterFilled, ExportOutlined } from "@ant-design/icons";
 import _ from "underscore";
-import { riskColorAlt } from "../../Utils";
+import { riskColorAlt } from "../Utils";
 
-function RiskRuleTable() {
+export const RiskRuleTable = () => {
   const RiskDropdown = ({ index }) => {
     return (
       <Select

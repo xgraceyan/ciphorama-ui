@@ -1,12 +1,22 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Table, Tag, Space, Inflow, Button, DatePicker, Tooltip } from "antd";
-import { SearchOutlined, SignalFilled, MoreOutlined } from "@ant-design/icons";
-import { FaEthereum } from "react-icons/fa";
-import { riskColor, riskScoreCalc, riskTriggeredColor } from "../../Utils";
+import { Table, Tag, Space, Inflow, Button, DatePicker } from "antd";
+import { SearchOutlined, SignalFilled } from "@ant-design/icons";
+import { 
+  riskColor, 
+  riskScoreCalc, 
+  riskBadgeColor,
+  riskTriggeredColor, 
+  riskTriggeredSearch,
+  convertToPrecision, 
+  formatDate,
+  EthereumIcon,
+  TextWithBox,
+} from "../Utils";
 import moment from "moment";
 import _ from "underscore";
+import { CryptoPrecision } from "../../Constants";
 
 function WalletSummaryTable(props) {
   const navigate = useNavigate();
@@ -102,39 +112,16 @@ function WalletSummaryTable(props) {
         setTimeout(() => searchInflow.current?.select(), 100);
       }
     },
-    render: (text) => text, // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
+    render: (text) => formatDate(text), // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
   });
-
-  function riskTriggeredSearch(riskTriggered) {
-    if (!_.isEmpty(riskTriggered)) {
-      if (riskTriggered.length > 2) {
-        return (
-          <Space>
-            {riskTriggered[0]}
-            {riskTriggered[1]}
-            <Tooltip title={riskTriggered}>
-              <MoreOutlined style={{ cursor: "pointer" }} />
-            </Tooltip>
-          </Space>
-        );
-      } else {
-        return (
-          <Space>
-            {riskTriggered[0]}
-            {riskTriggered[1]}
-          </Space>
-        );
-      }
-    } else {
-      return null;
-    }
-  }
 
   const columns = [
     {
       title: "Risk",
       dataIndex: "risk",
       key: "risk",
+      render: (text) => TextWithBox(text),
+      //  <Tag color={riskBadgeColor(text)}  style={{ transform: "scale(1.2)" }} > <b>{text} </b></Tag>,
       filters: [
         {
           text: "High",
@@ -168,41 +155,40 @@ function WalletSummaryTable(props) {
       render: (riskTriggered) => riskTriggeredSearch(riskTriggered),
     },
     {
-      title: "AssetType",
+      title: "Asset",
       dataIndex: "assetType",
       key: "assetType",
-      className: "rowCenter",
-      render: () => (
-        <FaEthereum style={{ transform: "scale(1.5)", textAlign: "center" }} />
-      ),
+      render: (text) => EthereumIcon(),
       filters: [
         {
           text: "ETH",
-          value: "eth",
+          value: "ETH",
         },
         {
           text: "BNB",
-          value: "bnb",
+          value: "BNB",
         },
         {
           text: "BTC",
-          value: "btc",
+          value: "BTC",
         },
       ],
       filterMode: "tree",
       filterSearch: true,
-      onFilter: (value, record) => record.assetType.startsWith(value),
+      onFilter: (value, record) => record.asset.startsWith(value),
     },
     {
-      title: "Inflow (USD)",
+      title: "Inflow",
       dataIndex: "inflow",
       key: "inflow",
+      render: (text) => convertToPrecision(text, CryptoPrecision),
       sorter: (a, b) => a.inflow - b.inflow,
     },
     {
-      title: "Outflow (USD)",
+      title: "Outflow",
       dataIndex: "outflow",
       key: "outflow",
+      render: (text) => convertToPrecision(text, CryptoPrecision),
       sorter: (a, b) => a.outflow - b.outflow,
     },
     {
@@ -216,7 +202,6 @@ function WalletSummaryTable(props) {
       key: "date",
       ...getColumnSearchProps("date"),
       filterIcon: <SignalFilled />,
-      render: (date) => moment(date).format("YYYY-MM-DD hh:mm:ss"),
     },
   ];
 
@@ -246,7 +231,7 @@ function WalletSummaryTable(props) {
     <Table
       columns={columns}
       dataSource={data}
-      pagination={{ position: ["bottomRight"] }}
+      pagination={{ position: ["bottomRight"], defaultPageSize: 20 }}
       rowClassName="tableRow"
     />
   );

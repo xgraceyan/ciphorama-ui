@@ -5,7 +5,7 @@ import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 import RiskRuleTable from "./RiskRuleTable";
 
-function RiskRule() {
+export const RiskRule = () => {
   return (
     <Layout>
       <Sidebar pageIndex={1} />

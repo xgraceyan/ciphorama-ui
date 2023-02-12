@@ -50,8 +50,8 @@ function WalletScanTable(props) {
 
   const data = [];
 
-  if (!_.isEmpty(props.currentWallet.scans)) {
-    for (const txn of props.currentWallet.scans) {
+  if (!_.isEmpty(props.currentAcct)) {
+    for (const txn of props.currentAcct.scans) {
       console.log("WalletDetails txn", txn);
       data.push({
         key: txn.id,
@@ -77,10 +77,9 @@ function WalletScanTable(props) {
 
 // map the entire redux store state to props.
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
-    currentWallet: state.wallets.currentWallet,
-    wallets: state.wallets.wallets,
+    currentAcct: state.accounts.currentAcct,
+    accounts: state.accounts.accounts,
     transactions: state.transactions.transactions,
   };
 };

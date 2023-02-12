@@ -2,10 +2,10 @@ import React from "react";
 
 import { Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
-import RiskRule from "./components/riskRule/RiskRule";
 import WalletDetails from "./components/wallet/WalletDetails";
 import WalletSummary from "./components/wallet/WalletSummary";
-import Dashboard from "./Dashboard";
+import Dashboard from "./components/Dashboard";
+import RiskRule from "./components/riskRule/RiskRule";
 
 function App() {
   return (

@@ -12,7 +12,7 @@ function WalletNavbar(props) {
   const navigate = useNavigate();
 
   const onSearch = (wallet) => {
-    console.log("WalletNavbar :: onSearch ", wallet);
+    console.log("WalletNavbar :: onSearch ", wallet + "&save=true");
     // props.fetchWallet(wallet);
     navigate("/wallet-details/" + wallet);
   };
