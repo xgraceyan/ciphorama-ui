@@ -66,7 +66,7 @@ function Sidebar({ pageIndex = -1 }) {
             label: "Dashboard",
             icon: <DashboardOutlined />,
             key: "0",
-            path: "/",
+            path: "/dashboard",
           },
           {
             label: "Risk Rules",

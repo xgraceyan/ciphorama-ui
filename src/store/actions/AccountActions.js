@@ -1,15 +1,16 @@
 import _ from "underscore";
 import { Buffer } from "buffer";
-import { graph_url, planner_url, screened_wallets_url} from "../../Constants";
+import { graph_url, planner_url, screened_wallets_url, dashboard_url} from "../../Constants";
 
 
-export const fetchWallet = (wallet, save_wallet = true) => {
+export const fetchWallet = (wallet, save_wallet = false) => {
   return (dispatch) => {
     // const account_url = graph_url + account;
     // const wallet = "0x04786aada9deea2150deab7b3b8911c309f5ed90";
     var account_url = planner_url + "?id=" + wallet;
     if (save_wallet) {
       account_url += "&save=true";
+      console.log("save")
     }
     console.log("fetching wallet url ", account_url);
     fetch(account_url, { method: "GET" })
@@ -68,3 +69,38 @@ export const fetchScreenedWallets = () => {
       .catch(console.log);
   };
 };
+
+export const fetchDashboard = () => {
+  return (dispatch) => {
+    const url = dashboard_url; // graph_url
+    console.log("fecthing dashboard ", dashboard_url);
+    fetch(url, { method: "GET" })
+      .then((response) => response.json())
+      .then(
+        (dashboard) => {
+          console.log("fetch dashboard response: ", dashboard);
+          if (!_.isEmpty(dashboard) && !_.isEmpty(dashboard.blob)) {
+            dashboard = JSON.parse(Buffer.from(dashboard.blob, "base64"));
+            dispatch({
+              type: "DASHBOARD_LOADING_SUCCESS",
+              dashboard,
+            });
+          } else if (!_.isEmpty(dashboard)) {
+            dispatch({ 
+              type: "DASHBOARD_LOADING_SUCCESS", 
+              dashboard 
+            });
+          } else {
+            dispatch({
+              type: "DASHBOARD_LOADING_FAILURE",
+              error: "empty dashboard",
+            });
+          }
+        },
+        (error) => {
+          dispatch({ type: "DASHBOARD_LOADING_FAILURE", error });
+        }
+      )
+      .catch(console.log);
+  };
+}

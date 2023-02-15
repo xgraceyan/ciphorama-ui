@@ -525,5 +525,48 @@
       value: 0,
       activityTime: "2018-06-21T11:41:56Z",
     },
-  ]
+  ],
+  "Dashboard": {
+    "dashboardStats": {
+      "totalAddresses": 92,
+      "totalTransactions": 0,
+      "totalOpenCase": 0
+    },
+    "riskSeverity": {
+      "abuse": 3,
+      "deployer": 20,
+      "exploiter": 6,
+      "fake": 13,
+      "gambling": 14,
+      "hacker": 40,
+      "phishing": 14,
+      "ransomware": 12,
+      "sanction": 26,
+      "scam": 19
+    },
+    "riskByCategory": {
+      "abuse": 1.79641,
+      "deployer": 11.97605,
+      "exploiter": 3.59281,
+      "fake": 7.78443,
+      "gambling": 8.38323,
+      "hacker": 23.9521,
+      "phishing": 8.38323,
+      "ransomware": 7.18563,
+      "sanction": 15.56886,
+      "scam": 11.37725
+    },
+    "walletByAssetTypes": {
+      "eth": 100
+    },
+    "caseManagement": [
+      {
+        "name": "John Smith",
+        "caseAssigned": 4,
+        "caseClosed": 1,
+        "caseOpen": 3,
+        "lastActivity": "2023-02-15T01:31:55.302040992Z"
+      }
+    ]
+  }
 }

@@ -8,7 +8,7 @@ export const RiskRuleTable = () => {
   const RiskDropdown = ({ index }) => {
     return (
       <Select
-        defaultValue="medium"
+        defaultValue="high"
         style={{
           width: 120,
         }}

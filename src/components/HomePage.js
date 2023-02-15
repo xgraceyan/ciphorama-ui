@@ -23,23 +23,21 @@ import {
 } from "antd";
 import Title from "antd/es/typography/Title";
 import Paragraph from "antd/es/typography/Paragraph";
-import DashboardTable from "./DashboardTable";
 import Sidebar from "./Sidebar";
 import Search from "antd/es/input/Search";
 import thunk from "redux-thunk";
-import { fetchDashboard } from "../store/actions/AccountActions";
 import { Header } from "antd/es/layout/layout";
 import Navbar from "./Navbar";
+import { fetchWallet } from "../store/actions/AccountActions";
 
-var jsonQuery = require("json-query");
-
-function Dashboard(props) {
-  const { Content } = Layout;
+function HomePage(props) {
   let { account_id } = useParams();
   const local_state = React.useState();
   const [state, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
   const navigate = useNavigate();
+
+  const { Content } = Layout;
 
   const onSearch = (wallet_addr) => {
     const search_addr = wallet_addr + "&save=true"
@@ -47,57 +45,6 @@ function Dashboard(props) {
     props.fetchWallet(search_addr);
     navigate("/wallet-details/" + search_addr);
   };
-
-  React.useEffect(() => {
-    console.log(" fetching dashboard ", props);
-    props.fetchDashboard();
-  }, []);
-
-  const mock_dashboard = {
-    "dashboardStats": {
-      "totalAddresses": 92,
-      "totalTransactions": 0,
-      "totalOpenCase": 0
-    },
-    "riskSeverity": {
-      "abuse": 3,
-      "deployer": 20,
-      "exploiter": 6,
-      "fake": 13,
-      "gambling": 14,
-      "hacker": 40,
-      "phishing": 14,
-      "ransomware": 12,
-      "sanction": 26,
-      "scam": 19
-    },
-    "riskByCategory": {
-      "abuse": 1.79641,
-      "deployer": 11.97605,
-      "exploiter": 3.59281,
-      "fake": 7.78443,
-      "gambling": 8.38323,
-      "hacker": 23.9521,
-      "phishing": 8.38323,
-      "ransomware": 7.18563,
-      "sanction": 15.56886,
-      "scam": 11.37725
-    },
-    "walletByAssetTypes": {
-      "eth": 100
-    },
-    "caseManagement": [
-      {
-        "name": "John Smith",
-        "caseAssigned": 4,
-        "caseClosed": 1,
-        "caseOpen": 3,
-        "lastActivity": "2023-02-15T01:31:55.302040992Z"
-      }
-    ]
-  };
-
-  console.log("rendering Dashboard props ", props);
 
   return (
     <Layout>
@@ -137,15 +84,14 @@ const mapStateToProps = (state) => {
     currentWallet: state.wallets.currentWallet,
     wallets: state.wallets.wallets,
     transactions: state.transactions.transactions,
-    ...state.dashboard,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchDashboard: () =>
-      dispatch(fetchDashboard()),
+    fetchWallet: (wallet) =>
+      dispatch(fetchWallet(wallet)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -7,17 +7,15 @@ import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
 import { 
   riskColor, 
-  riskTriggeredColor, 
-  riskScoreCalc, 
   formatDate, 
   convertToPrecision, 
-  shortenAddress, 
   EthereumIcon, 
   generateWalletUrl,
-  riskBadgeColor,
-  TextWithBoxColor
+  TextWithBoxColor,
+  riskCategoryCalc,
+  riskBadgeColor
 } from "../Utils";
-import { CryptoPrecision } from "../../Constants";
+import { CryptoPrecision, USDPrecision } from "../../Constants";
 
 
 function WalletDetailsTable(props) {
@@ -116,6 +114,7 @@ function WalletDetailsTable(props) {
     render: (text) => formatDate(text), // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
   });
 
+
   const columns = [
     {
       title: "Severity",
@@ -164,17 +163,24 @@ function WalletDetailsTable(props) {
       render: () => EthereumIcon(),
     },
     {
-      title: "Value",
+      title: "Amount",
       dataIndex: "value",
       key: "value",
       render: (text) => convertToPrecision(text, CryptoPrecision),
       sorter: (a, b) => a.value - b.value,
     },
     {
-      title: "Customer",
-      dataIndex: "customer",
-      key: "customer",
+      title: "Value (USD)",
+      dataIndex: "usdValue",
+      key: "usdValue",
+      render: (text) => convertToPrecision(text, CryptoPrecision),
+      sorter: (a, b) => a.value - b.value,
     },
+    // {
+    //   title: "Customer",
+    //   dataIndex: "customer",
+    //   key: "customer",
+    // },
     {
       title: "Activity Time",
       dataIndex: "date",
@@ -195,13 +201,14 @@ function WalletDetailsTable(props) {
         transactionId: txn.id,
         risk: riskColor(txn.risk, txn.risk),
         // risk: colorCodedNumber(txn.riskScore, riskBadgeColor(txn.risk)),
-        riskTriggered: TextWithBoxColor(txn.riskTriggered, "#A9CCE3"),
+        riskTriggered: TextWithBoxColor(txn.riskTriggered, riskBadgeColor(riskCategoryCalc(txn.riskTriggered)), txn.riskScore),
         direction: txn.direction,
         fromAddress: txn.fromAddress,
         toAddress: txn.toAddress,
         counterEntity: txn.counterEntity,
         assetType: txn.assetType,
         value: txn.value,
+        usdValue: convertToPrecision(txn.value * 1560, USDPrecision),
         customer: txn.customer,
         date: txn.activityTime,
       });

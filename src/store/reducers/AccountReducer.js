@@ -47,10 +47,19 @@ const AccountReducer = (state = initState, action) => {
         ...state,
         currentWallet: {},
       };
-    default:
+    case "DASHBOARD_LOADING_SUCCESS":
+      console.log("Dashboard load successfully. ", action.dashboard );
       return {
         ...state,
+        currentWallet: {},
+        wallets,
+        dashboard: action.dashboard,
       };
+    default:
+      console.log(" AccountReducer unknown action: ", action);
+      return {
+        ...state,
+      }
   }
 };
 

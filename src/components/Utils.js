@@ -2,7 +2,12 @@ import _ from 'underscore'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEthereum } from '@fortawesome/free-brands-svg-icons'
 import { Table, Tag, Space, Inflow, Button, DatePicker, Tooltip } from 'antd'
-import { SearchOutlined, SignalFilled, MoreOutlined } from '@ant-design/icons'
+import {
+  SearchOutlined,
+  SignalFilled,
+  MoreOutlined,
+  EllipsisOutlined
+} from '@ant-design/icons'
 import { wallet_detail_url } from '../Constants'
 
 export const riskColor = (risk, name) => {
@@ -23,7 +28,7 @@ export const riskBadgeColor = risk => {
   if (risk == 'Critical') return 'maroon'
   if (risk == 'High') return 'red'
   if (risk == 'Medium') return 'gold'
-if (risk == 'Low') return 'green'
+  if (risk == 'Low') return 'green'
 }
 
 export const riskScoreCalc = riskScore => {
@@ -33,12 +38,33 @@ export const riskScoreCalc = riskScore => {
   return 'Low'
 }
 
+export function riskCategoryCalc (risk) {
+  switch (risk) {
+    case 'sanction':
+    case 'ransomware':
+      return 'Critical'
+    case 'phishing':
+    case 'scam':
+    case 'fake':
+    case 'hacker':
+    case 'abuse':
+    case 'exploiter':
+      return 'High'
+    case 'ponzi':
+    case 'gambling':
+    case 'adult':
+      return 'Medium'
+    default:
+      return 'Low'
+  }
+}
+
 export const riskTriggeredColor = riskTriggered => {
   var riskArr = []
   // console.log('RISKTRIGGERD >> ', riskTriggered)
   if (!_.isEmpty(riskTriggered)) {
     riskTriggered.forEach(risk => {
-      riskArr.push(riskColor(risk.riskLevel, risk.name))
+      riskArr.push(riskColor(riskCategoryCalc(risk.name), risk.name))
     })
   }
   return riskArr
@@ -52,10 +78,10 @@ export const riskTriggeredSearch = riskTriggered => {
         <Space>
           <Tag
             color={riskBadgeColor(riskTriggered[0])}
-            style={{ transform: 'scale(1.1)' }}
+            style={{ transform: 'scale(1.2)' }}
           >
             {' '}
-            {riskTriggered[0]} 
+            {riskTriggered[0]}
           </Tag>
         </Space>
       )
@@ -64,17 +90,17 @@ export const riskTriggeredSearch = riskTriggered => {
         <Space>
           <Tag
             color={riskBadgeColor(riskTriggered[0])}
-            style={{ transform: 'scale(1.1)' }}
+            style={{ transform: 'scale(1.2)' }}
           >
             {' '}
-            {riskTriggered[0]} 
+            {riskTriggered[0]}
           </Tag>
           <Tag
             color={riskBadgeColor(riskTriggered[1])}
-            style={{ transform: 'scale(1.1)' }}
+            style={{ transform: 'scale(1.2)' }}
           >
             {' '}
-            {riskTriggered[1]} 
+            {riskTriggered[1]}
           </Tag>
         </Space>
       )
@@ -83,14 +109,14 @@ export const riskTriggeredSearch = riskTriggered => {
         <Space>
           <Tag
             color={riskBadgeColor(riskTriggered[0])}
-            style={{ transform: 'scale(1.1)' }}
+            style={{ transform: 'scale(1.2)' }}
           >
             {' '}
-            {riskTriggered[0]} 
+            {riskTriggered[0]}
           </Tag>
           <Tag
             color={riskBadgeColor(riskTriggered[1])}
-            style={{ transform: 'scale(1.1)' }}
+            style={{ transform: 'scale(1.2)' }}
           >
             {' '}
             {riskTriggered[1]}
@@ -179,28 +205,49 @@ export const TextWithBox = text => {
   )
 }
 
-export function TextWithBoxColor (text, color) {
+export function TextWithBoxColor (text, color, score) {
+  if (text === '' || typeof text === 'undefined') {
+    return text
+  }
   return (
-    <Tag color={color} style={{ transform: 'scale(1.1)' }}>
-      {' '}
-      {text}
-    </Tag>
+    <Space>
+      <Tag color={color} style={{ transform: 'scale(1.1)' }}>
+        {' '}
+        {text}
+      </Tag>
+      <Tooltip title={100 * score.toFixed(0) +'%'}>
+        <EllipsisOutlined style={{ cursor: 'pointer' }} />
+      </Tooltip>
+    </Space>
   )
 }
 
-export function colorCodedNumber (number, color) {
-  return (
-    <div>
-      <p
-        style={{
-          color: color,
-          fontWeight: 'bold',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
-        {(10 * number).toFixed(0)}{' '}
-      </p>
-    </div>
-  )
+export function moneyToLocaleString (money) {
+  if (money === null || typeof money === 'undefined') {
+    return money
+  }
+  return money.toLocaleString('en-US')
+}
+
+export function numberToTxn (num) {
+  if (num === null || typeof num === 'undefined') {
+    return num
+  }
+  return num.toLocaleString('en-US') + ' TXN'
+}
+
+export function showRiskTriggered (risk) {
+  if (risk === null || typeof risk === 'undefined') {
+    return ''
+  }
+  return risk.map(item => (
+    <li key={item.name}>
+      {item.name}: {(100 * item.score).toFixed(0) + '%'}
+    </li>
+  ))
+}
+
+
+export function BackLink () {
+  return <a onClick={() => window.history.back()}>Go back</a>
 }

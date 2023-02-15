@@ -113,7 +113,7 @@ function WalletSummaryTable(props) {
         setTimeout(() => searchInflow.current?.select(), 100);
       }
     },
-    render: (text) => formatDate(text), // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
+    render: (text) => formatDate(text),
   });
 
   const columns = [
@@ -122,7 +122,6 @@ function WalletSummaryTable(props) {
       dataIndex: "risk",
       key: "risk",
       render: (text) => TextWithBox(text),
-      //  <Tag color={riskBadgeColor(text)}  style={{ transform: "scale(1.2)" }} > <b>{text} </b></Tag>,
       filters: [
         {
           text: "Critical",
@@ -205,6 +204,7 @@ function WalletSummaryTable(props) {
       title: "Date/Time",
       dataIndex: "date",
       key: "date",
+      sorter: (a, b) => new Date(a.date).getTime() < new Date(b.date).getTime(),
       ...getColumnSearchProps("date"),
       filterIcon: <SignalFilled />,
     },
