@@ -23,6 +23,8 @@ import WalletNavbar from './WalletNavbar'
 import moment from 'moment'
 import WalletScanTable from './WalletScanTable'
 import WalletGraphView from './WalletGraphView'
+import WalletVolumeView from './WalletVolumeView'
+
 import {
   riskBadgeColor,
   riskTriggeredColor,
@@ -256,7 +258,8 @@ function WalletDetails (props) {
               {
                 key: '3',
                 label: 'Volume',
-                children: 'Volume'
+                children: <WalletVolumeView />
+                // children: 'Volume'
               },
               {
                 key: '4',

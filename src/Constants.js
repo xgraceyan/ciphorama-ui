@@ -10,3 +10,4 @@ export const planner_url = `http://localhost:${localPort}/v1/wallets`;
 export const screened_wallets_url = `http://localhost:${localPort}/v1/wallet-screen`;
 export const wallet_detail_url = `http://localhost:3000/wallet-details/`;
 export const dashboard_url = `http://localhost:${localPort}/v1/dashboard`;
+export const wallet_volume_url = `http://localhost:${localPort}/v1/wallet-volume`;

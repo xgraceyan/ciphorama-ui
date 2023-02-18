@@ -1,6 +1,6 @@
 import _ from "underscore";
 import { Buffer } from "buffer";
-import { graph_url, planner_url, screened_wallets_url, dashboard_url} from "../../Constants";
+import { graph_url, planner_url, screened_wallets_url, dashboard_url, wallet_volume_url} from "../../Constants";
 
 
 export const fetchWallet = (wallet, save_wallet = false) => {
@@ -99,6 +99,35 @@ export const fetchDashboard = () => {
         },
         (error) => {
           dispatch({ type: "DASHBOARD_LOADING_FAILURE", error });
+        }
+      )
+      .catch(console.log);
+  };
+}
+
+export const fetchWalletVolume = (wallet) => {
+  return (dispatch) => {
+    var volume_url = wallet_volume_url + "?id=" + wallet;
+    console.log("fetchWalletVolume ", volume_url);
+    fetch(volume_url, { method: "GET" })
+      .then((response) => response.json())
+      .then(
+        (wallet_volume) => {
+          if (!_.isEmpty(wallet_volume) && !_.isEmpty(wallet_volume.blob)) {
+            wallet_volume = JSON.parse(Buffer.from(wallet_volume.blob, "base64"));
+            // console.log(wallet_volume)
+            dispatch({ type: "WALLET_VOLUME_LOADING_SUCCESS", wallet_volume });
+          } else if (!_.isEmpty(wallet_volume)) {
+            dispatch({ type: "WALLET_VOLUME_LOADING_SUCCESS", wallet_volume });
+          } else {
+            dispatch({
+              type: "WALLET_VOLUME_LOADING_FAILURE",
+              error: "empty wallet volume",
+            });
+          }
+        },
+        (error) => {
+          dispatch({ type: "WALLET_VOLUME_LOADING_FAILURE", error });
         }
       )
       .catch(console.log);
