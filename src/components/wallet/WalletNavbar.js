@@ -1,7 +1,7 @@
 import { Avatar, Layout, Menu, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
 
-import { SettingFilled } from "@ant-design/icons";
+import { SettingFilled, LeftCircleTwoTone } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router";
 import { connect } from "react-redux";
@@ -13,9 +13,13 @@ function WalletNavbar(props) {
 
   const onSearch = (wallet) => {
     console.log("WalletNavbar :: onSearch ", wallet + "&save=true");
-    // props.fetchWallet(wallet);
+    props.fetchWallet(wallet);
     navigate("/wallet-details/" + wallet);
   };
+
+  const onBack = () => {
+    navigate(-1);
+  }
 
   return (
     <Header className="header nav-header">
@@ -35,6 +39,12 @@ function WalletNavbar(props) {
         className="nav-right"
         style={{ float: "right", margin: "0px 24px 16px 0" }}
       >
+        <Space>
+          <LeftCircleTwoTone
+            style={{ width: 50, fontSize: '200%', verticalAlign: "middle" }}
+            onClick={onBack}
+          />
+        </Space>
         <Space direction="horizontal">
           <Search
             placeholder="Search for addresses, transactions, cases, and customers..."
@@ -88,4 +98,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapDispatchToProps)(WalletNavbar);
+export default connect(null, mapDispatchToProps)(WalletNavbar);

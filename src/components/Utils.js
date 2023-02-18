@@ -61,7 +61,6 @@ export function riskCategoryCalc (risk) {
 
 export const riskTriggeredColor = riskTriggered => {
   var riskArr = []
-  // console.log('RISKTRIGGERD >> ', riskTriggered)
   if (!_.isEmpty(riskTriggered)) {
     riskTriggered.forEach(risk => {
       riskArr.push(riskColor(riskCategoryCalc(risk.name), risk.name))
@@ -71,7 +70,6 @@ export const riskTriggeredColor = riskTriggered => {
 }
 
 export const riskTriggeredSearch = riskTriggered => {
-  console.log(riskTriggered)
   if (!_.isEmpty(riskTriggered)) {
     if (riskTriggered.length === 1) {
       return (
@@ -176,9 +174,9 @@ export function formatDate (dateString) {
 
 export function EthereumIcon () {
   return (
-    <>
+    <div>
       <FontAwesomeIcon icon={faEthereum} /> ETH
-    </>
+    </div>
   )
 }
 

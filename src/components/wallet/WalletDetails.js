@@ -54,8 +54,6 @@ function WalletDetails (props) {
     }
   }, [])
 
-  console.log('CURRENT WALLET >>>', props.currentWallet)
-
   console.log(
     'Rendering WalletDetails wallet ',
     useParams(),
@@ -68,7 +66,6 @@ function WalletDetails (props) {
   const copyAddress = () => {
     navigator.clipboard.writeText(props.currentWallet.id)
   }
-
 
   return (
     <Layout>
@@ -239,9 +236,6 @@ function WalletDetails (props) {
             <h1>Invalid ID</h1>
           )}
 
-          {/* @haijin, can you improve the backlink?  */}
-          <div  style={{ margin: '20px' }}>  <BackLink />   </div>
-
           <Divider />
 
           <Tabs
@@ -288,7 +282,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchWallet: wallet => dispatch(fetchWallet(wallet))
+    fetchWallet: (wallet) => dispatch(fetchWallet(wallet))
   }
 }
 
