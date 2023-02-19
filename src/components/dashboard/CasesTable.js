@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import React from "react";
+import { formatDate } from "../Utils";
 
 function CasesTable(props) {
   const { data } = props;
@@ -26,8 +27,9 @@ function CasesTable(props) {
     },
     {
       title: "Last Activity",
-      dataIndex: "activity",
+      dataIndex: "lastActivity",
       key: "lastActivity",
+      render: (text) => formatDate(text),
     },
   ];
 
