@@ -3,35 +3,34 @@ import { connect } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Table, Tag, Space, Inflow, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { 
-  riskColor, 
-  riskScoreCalc, 
+import {
+  riskColor,
+  riskScoreCalc,
   riskBadgeColor,
-  riskTriggeredColor, 
+  riskTriggeredColor,
   riskTriggeredSearch,
-  convertToPrecision, 
+  convertToPrecision,
   formatDate,
   EthereumIcon,
   TextWithBox,
-  shortenAddress
+  shortenAddress,
 } from "../Utils";
 import moment from "moment";
 import _ from "underscore";
 import { CryptoPrecision } from "../../Constants";
 
 function WalletSummaryTable(props) {
-  const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const searchInflow = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-  const handleReset = (clearFilters) => {
+  const handleReset = (clearFilters, confirm) => {
     clearFilters();
     setSearchText("");
+    confirm();
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -44,6 +43,7 @@ function WalletSummaryTable(props) {
       <div
         style={{
           padding: 8,
+          marginRight: 10,
         }}
         onKeyDown={(e) => e.stopPropagation()}
       >
@@ -72,7 +72,7 @@ function WalletSummaryTable(props) {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleReset(clearFilters, confirm)}
             size="small"
             style={{
               width: 100,
@@ -100,19 +100,10 @@ function WalletSummaryTable(props) {
       />
     ),
     onFilter: (value, record) =>
-      record[dataIndex]
-        ? moment(record[dataIndex]).isBetween(
-            moment(value[0]).format("YYYY-MM-DD"),
-            moment(value[1]).format("YYYY-MM-DD"),
-            "day",
-            "[]"
-          )
-        : "",
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInflow.current?.select(), 100);
-      }
-    },
+      moment(record[dataIndex]).isBetween(
+        moment(value[0].$d),
+        moment(value[1].$d)
+      ),
     render: (text) => formatDate(text),
   });
 
@@ -204,7 +195,7 @@ function WalletSummaryTable(props) {
       title: "Date/Time",
       dataIndex: "date",
       key: "date",
-      sorter: (a, b) => new Date(a.date).getTime() < new Date(b.date).getTime(),
+      sorter: (a, b) => new Date(a.date) - new Date(b.date),
       ...getColumnSearchProps("date"),
       filterIcon: <SignalFilled />,
     },
@@ -217,13 +208,7 @@ function WalletSummaryTable(props) {
       data.push({
         key: wallet.id,
         transactionId: wallet.id,
-        // risk: riskColor(
-        //   riskScoreCalc(wallet.riskScore),
-        //   riskScoreCalc(wallet.riskScore)
-        // ),
-        risk: riskColor(
-          wallet.risk,wallet.risk
-        ),
+        risk: riskColor(wallet.risk, wallet.risk),
         address: wallet.address,
         riskTriggered: riskTriggeredColor(wallet.riskTriggered),
         assetType: wallet.assetType,

@@ -40,7 +40,7 @@ function HomePage(props) {
   const { Content } = Layout;
 
   const onSearch = (wallet_addr) => {
-    const search_addr = wallet_addr + "&save=true"
+    const search_addr = wallet_addr + "&save=true";
     console.log("on search nav to ", search_addr);
     props.fetchWallet(search_addr);
     navigate("/wallet-details/" + search_addr);
@@ -49,7 +49,7 @@ function HomePage(props) {
   return (
     <Layout>
       <Layout>
-        <Sidebar pageIndex={0} />
+        <Sidebar pageIndex={-1} />
         <Content
           style={{
             margin: "0",
@@ -89,8 +89,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchWallet: (wallet) =>
-      dispatch(fetchWallet(wallet)),
+    fetchWallet: (wallet) => dispatch(fetchWallet(wallet)),
   };
 };
 

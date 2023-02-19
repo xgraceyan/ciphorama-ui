@@ -18,8 +18,8 @@ const CreateNode = (txn, x, y) => {
     size: 80,
     label: shortenAddress(txn.toAddress), // + "\n" + txn.value + " " + txn.assetType,
     data: txn,
-  }
-}
+  };
+};
 
 const CreateEdge = (txn) => {
   var src, target;
@@ -37,8 +37,8 @@ const CreateEdge = (txn) => {
     label: shortenAddress(txn.id),
     data: txn,
     // moment.unix(txn.activityTime).format("YYYY-MM-DD hh:mm:ss"),
-  }
-}
+  };
+};
 
 function GetLayout(currentWallet) {
   // return {
@@ -53,11 +53,11 @@ function GetLayout(currentWallet) {
   //   strictRadial: false,
   // }
   return {
-    type: 'mds',
+    type: "mds",
     center: [600, 400],
     linkDistance: 200,
     workerEnabled: true,
-  }
+  };
 }
 
 function WalletGraphView(props) {
@@ -108,17 +108,20 @@ function WalletGraphView(props) {
           layout: GetLayout(currentWallet),
           modes: {
             default: [
-              'drag-canvas', 'drag-node', 'click-select', 'activate-relations', 
+              "drag-canvas",
+              "drag-node",
+              "click-select",
+              "activate-relations",
               {
                 type: "tooltip",
                 formatText(model) {
                   console.log(" node tooltip model => ", model);
-                  const node_details =  "<strong>Wallet </strong>: " + model.id;
+                  const node_details = "<strong>Wallet </strong>: " + model.id;
                   return node_details;
                 },
               },
               {
-                type: "edge-tooltip", 
+                type: "edge-tooltip",
                 formatText(model) {
                   // The content of tooltip
                   console.log("edge tooltip model => ", model);
@@ -170,7 +173,11 @@ function WalletGraphView(props) {
       labelCfg: {
         style: {
           fontSize: 15,
+          fill: "white",
         },
+      },
+      style: {
+        fill: "#8bb1f0",
       },
     });
 
@@ -180,15 +187,12 @@ function WalletGraphView(props) {
     while (!_.isEmpty(queue)) {
       const headAddr = queue.pop();
       for (const txn of transactions) {
-        if (
-          txn.fromAddress == headAddr &&
-          !processedTxns.includes(txn.id) 
-        ) {
+        if (txn.fromAddress == headAddr && !processedTxns.includes(txn.id)) {
           queue.push(txn.toAddress);
           processedTxns.push(txn.id);
           graphData.nodes.push(CreateNode(txn));
           graphData.edges.push(CreateEdge(txn));
-        } 
+        }
       }
     }
   }

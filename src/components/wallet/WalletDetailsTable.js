@@ -1,35 +1,34 @@
 import moment from "moment";
 import _ from "underscore";
 import React, { useRef, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { Table, Tag, Space, Input, Button, DatePicker } from "antd";
 import { SearchOutlined, SignalFilled } from "@ant-design/icons";
-import { 
-  riskColor, 
-  formatDate, 
-  convertToPrecision, 
-  EthereumIcon, 
+import {
+  riskColor,
+  formatDate,
+  convertToPrecision,
+  EthereumIcon,
   generateWalletUrl,
   TextWithBoxColor,
   riskCategoryCalc,
-  riskBadgeColor
+  riskBadgeColor,
 } from "../Utils";
 import { CryptoPrecision, USDPrecision } from "../../Constants";
-
 
 function WalletDetailsTable(props) {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const searchInput = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-  const handleReset = (clearFilters) => {
+  const handleReset = (clearFilters, confirm) => {
     clearFilters();
     setSearchText("");
+    confirm();
   };
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -42,6 +41,7 @@ function WalletDetailsTable(props) {
       <div
         style={{
           padding: 8,
+          marginRight: 10,
         }}
         onKeyDown={(e) => e.stopPropagation()}
       >
@@ -70,7 +70,7 @@ function WalletDetailsTable(props) {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleReset(clearFilters, confirm)}
             size="small"
             style={{
               width: 100,
@@ -98,22 +98,12 @@ function WalletDetailsTable(props) {
       />
     ),
     onFilter: (value, record) =>
-      record[dataIndex]
-        ? moment(record[dataIndex]).isBetween(
-            moment(value[0]).format("YYYY-MM-DD"),
-            moment(value[1]).format("YYYY-MM-DD"),
-            "day",
-            "[]"
-          )
-        : "",
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) => formatDate(text), // moment.unix(text).format("YYYY-MM-DD hh:mm:ss"),
+      moment(record[dataIndex]).isBetween(
+        moment(value[0].$d),
+        moment(value[1].$d)
+      ),
+    render: (text) => formatDate(text),
   });
-
 
   const columns = [
     {
@@ -136,26 +126,16 @@ function WalletDetailsTable(props) {
       title: "From",
       dataIndex: "fromAddress",
       key: "fromAddress",
-      render: (text)=> generateWalletUrl(text),
+      render: (text) => generateWalletUrl(text),
       sorter: (a, b) => a.value < b.value,
     },
     {
       title: "To",
       dataIndex: "toAddress",
       key: "toAddress",
-      render: (text)=> generateWalletUrl(text),
+      render: (text) => generateWalletUrl(text),
       sorter: (a, b) => a.value < b.value,
     },
-    // {
-    //   title: "Counterparty Address",
-    //   dataIndex: "counterAddress",
-    //   key: "counterAddress",
-    // },
-    // {
-    //   title: "Counterparty Entity",
-    //   dataIndex: "counterEntity",
-    //   key: "counterEntity",
-    // },
     {
       title: "Asset",
       dataIndex: "assetType",
@@ -176,15 +156,11 @@ function WalletDetailsTable(props) {
       render: (text) => convertToPrecision(text, CryptoPrecision),
       sorter: (a, b) => a.value - b.value,
     },
-    // {
-    //   title: "Customer",
-    //   dataIndex: "customer",
-    //   key: "customer",
-    // },
     {
       title: "Activity Time",
       dataIndex: "date",
       key: "date",
+      sorter: (a, b) => new Date(a.date) - new Date(b.date),
       ...getColumnSearchProps("date"),
       filterIcon: <SignalFilled />,
     },
@@ -192,8 +168,11 @@ function WalletDetailsTable(props) {
 
   console.log("rendering WalletDetailsTable props ", props);
   const data = [];
-  if (!_.isEmpty(props.currentWallet) && !_.isEmpty(props.currentWallet.transactions)) {
-    console.log(props.currentWallet.transactions)
+  if (
+    !_.isEmpty(props.currentWallet) &&
+    !_.isEmpty(props.currentWallet.transactions)
+  ) {
+    console.log(props.currentWallet.transactions);
     for (const txn of props.currentWallet.transactions) {
       // console.log(txn)
       data.push({
@@ -201,7 +180,11 @@ function WalletDetailsTable(props) {
         transactionId: txn.id,
         risk: riskColor(txn.risk, txn.risk),
         // risk: colorCodedNumber(txn.riskScore, riskBadgeColor(txn.risk)),
-        riskTriggered: TextWithBoxColor(txn.riskTriggered, riskBadgeColor(riskCategoryCalc(txn.riskTriggered)), txn.riskScore),
+        riskTriggered: TextWithBoxColor(
+          txn.riskTriggered,
+          riskBadgeColor(riskCategoryCalc(txn.riskTriggered)),
+          txn.riskScore
+        ),
         direction: txn.direction,
         fromAddress: txn.fromAddress,
         toAddress: txn.toAddress,

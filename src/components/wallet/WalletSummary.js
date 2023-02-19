@@ -44,7 +44,6 @@ function WalletSummary(props) {
               style={{ width: "75%" }}
             />
           </section> */}
-          <Divider />
           <Row justify="space-around" align="middle">
             <Col span={12} align="left" className="wallet-summary-title">
               <p style={{ fontSize: "1.5rem" }}>Wallets Screened</p>

@@ -2,11 +2,16 @@ import { Avatar, Layout, Menu, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
 
 import { SettingFilled, LeftCircleTwoTone } from "@ant-design/icons";
+import {
+  faAngleDoubleLeft,
+  faBackward,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router";
 import { connect } from "react-redux";
 import { fetchWallet } from "../../store/actions/AccountActions";
 import Search from "antd/es/input/Search";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function WalletNavbar(props) {
   const navigate = useNavigate();
@@ -19,7 +24,7 @@ function WalletNavbar(props) {
 
   const onBack = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <Header className="header nav-header">
@@ -40,8 +45,15 @@ function WalletNavbar(props) {
         style={{ float: "right", margin: "0px 24px 16px 0" }}
       >
         <Space>
-          <LeftCircleTwoTone
-            style={{ width: 50, fontSize: '200%', verticalAlign: "middle" }}
+          <FontAwesomeIcon
+            icon={faAngleDoubleLeft}
+            style={{
+              width: 50,
+              fontSize: "120%",
+              verticalAlign: "middle",
+              cursor: "pointer",
+              color: "#1677ff",
+            }}
             onClick={onBack}
           />
         </Space>

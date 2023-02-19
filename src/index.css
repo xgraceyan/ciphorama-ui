@@ -7,6 +7,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media screen and (min-width: 1200px) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -80,6 +86,7 @@ code {
 .nav-header,
 .navbar {
   background: white !important;
+  border-bottom: transparent !important;
 }
 
 .navbar .ant-menu-item:after {
@@ -151,10 +158,13 @@ code {
 }
 
 .ant-menu-dark .ant-menu-item-selected,
-.ant-menu-dark .ant-menu-item:active,
-.ant-menu-dark .ant-menu-submenu-title {
+.ant-menu-dark .ant-menu-item:active {
   background-color: transparent !important;
   font-weight: bolder;
+}
+
+.ant-menu-dark .ant-menu-submenu-title {
+  background-color: transparent !important;
 }
 
 .ant-menu-dark .ant-menu {
@@ -197,4 +207,11 @@ a::before {
 
 .wallet-details-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
   color: white !important;
+}
+
+.border-col {
+  padding: 2rem;
+  border-radius: 25px;
+  border: 1px solid lightgray;
+  position: relative;
 }

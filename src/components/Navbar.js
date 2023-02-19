@@ -9,7 +9,8 @@ const Navbar = () => {
     <Header className="header nav-header">
       <div
         className="nav-right"
-        style={{ float: "right", margin: "0px 24px 16px 0" }}>
+        style={{ float: "right", margin: "0px 24px 16px 0" }}
+      >
         <Space>
           <div>
             <a href="" className="icon-button">

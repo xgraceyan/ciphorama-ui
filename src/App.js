@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import WalletDetails from "./components/wallet/WalletDetails";
 import WalletSummary from "./components/wallet/WalletSummary";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 import RiskRule from "./components/riskRule/RiskRule";
 
 function App() {
