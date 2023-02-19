@@ -10,7 +10,6 @@ import { CryptoPrecision } from "../../Constants";
 var ReactDOM = require("react-dom");
 
 const CreateNode = (txn, x, y) => {
-  console.log("Creating Node : ", shortenAddress(txn.toAddress));
   return {
     id: txn.toAddress,
     // x: x,
@@ -205,11 +204,10 @@ function WalletGraphView(props) {
     // graph.fitCenter();
 
     graph.on("node:mouseenter", (event) => {
-      console.log("node:mouseenter >>>", event);
     });
 
     graph.on("node:click", (event) => {
-      console.log(" node:click => ", event);
+      console.log(" node:click: ", event);
       window.location.replace("/wallet-details/" + event.item._cfg.model.id);
     });
   }

@@ -5,33 +5,33 @@ const initState = {
   data: []
 }
 
-const truncateDate = (d) => {
-  const timestamp = new Date(d).getTime()
-  const truncatedTimestamp = new Date(
-    Math.floor(timestamp / (1000 * 60 * 60 * 24 * 30)) *
-      (1000 * 60 * 60 * 24 * 30)
-  ).getTime()
+// const transformData = data => {
+//   return data
+//     .flatMap(item => [
+//       { type: item.period.slice(0, 13), value: item.in },
+//       { type: item.period.slice(0, 13), value: -item.out }
+//     ])
+//     .map(item => ({
+//       type: item.type,
+//       value: item.value
+//     }))
+// }
 
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  })
-  const formattedDate = formatter.format(truncatedTimestamp)
-
-  return formattedDate
-}
-
-const transformData = data => {
-  return data
-    .flatMap(item => [
-      { type: truncateDate(item.period), value: item.in },
-      { type: truncateDate(item.period)+" ", value: -item.out }
-    ])
-    .map(item => ({
-      type: item.type,
-      value: item.value
-    }))
+function transformData (arr) {
+    const result = []
+    for (let i=0; i < arr.length; i++) {
+        result.push({
+            time: arr[i].period.slice(0, 10),
+            type: 'inflow (ETH)',
+            value: arr[i].in,
+        })
+        result.push({
+            time: arr[i].period.slice(0, 10),
+            type: 'outflow (ETH)',
+            value: -arr[i].out,
+        })
+    }
+    return result
 }
 
 const WalletVolumeReducer = (state = initState, action) => {

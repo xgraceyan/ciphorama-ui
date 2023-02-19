@@ -27,24 +27,24 @@ function WalletVolumeView (props) {
   const brandColor = '#5B8FF9'
   const config = {
     data,
-    xField: 'type',
+    xField: 'time',
     yField: 'value',
-    seriesField: '',
-    color: ({ value }) => {
-      // value undefined
-      // console.log(type1, " ", value)
-      if (value < 0.0) {
-        return paletteSemanticRed
-      }
-      return brandColor
-    },
-    legend: false,
-    xAxis: {
-      label: {
-        autoHide: true,
-        autoRotate: false
-      }
-    }
+    seriesField: 'type',
+    isGroup: true,
+    // label: {
+    //   position: 'middle',
+    //   layout: [
+    //     {
+    //       type: 'interval-adjust-position',
+    //     }, 
+    //     {
+    //       type: 'interval-hide-overlap',
+    //     }, 
+    //     {
+    //       type: 'adjust-color',
+    //     },
+    //   ],
+    // },
   }
 
   return <Column {...config} />

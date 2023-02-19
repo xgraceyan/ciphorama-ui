@@ -16,7 +16,7 @@ const DashboardReducer = (state = initState, action) => {
         dashboard: action.dashboard,
       };
     default:
-      console.log(" DashboardReducer unknown action: ", action);
+      console.log(" DashboardReducer ignored action: ", action);
       return {
         ...state,
       }

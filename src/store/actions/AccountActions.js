@@ -45,10 +45,9 @@ export const fetchScreenedWallets = () => {
       .then((response) => response.json())
       .then(
         (wallets) => {
-          console.log(wallets);
           if (!_.isEmpty(wallets) && !_.isEmpty(wallets.blob)) {
             wallets = JSON.parse(Buffer.from(wallets.blob, "base64"));
-            console.log("screen wallet loading ", wallets.wallets);
+            // console.log("screen wallet loading ", wallets.wallets);
             dispatch({
               type: "ALL_ACCOUNT_LOADING_SUCCESS",
               wallets: wallets.wallets,

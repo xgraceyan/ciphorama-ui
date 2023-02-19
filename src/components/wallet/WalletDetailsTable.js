@@ -172,9 +172,7 @@ function WalletDetailsTable(props) {
     !_.isEmpty(props.currentWallet) &&
     !_.isEmpty(props.currentWallet.transactions)
   ) {
-    console.log(props.currentWallet.transactions);
     for (const txn of props.currentWallet.transactions) {
-      // console.log(txn)
       data.push({
         key: txn.id,
         transactionId: txn.id,
